@@ -1,6 +1,5 @@
 <script lang="ts">
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/state';
 
 	let { children } = $props();
@@ -16,7 +15,12 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<!-- Two sizes: browsers pick 32 for the tab, 96 for bookmarks and the
+	     Android home screen. Serving only the 512 would make every tab decode a
+	     400kB PNG to draw 32 pixels. -->
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-canvas">
