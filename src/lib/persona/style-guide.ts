@@ -8,6 +8,9 @@
  * with the input (PLAN.md §9) rather than just counting style markers.
  */
 import { USABLE_CORPUS, PEAK_CORPUS, type CorpusTweet } from './corpus';
+import { deterministicSample } from './rng';
+
+export { deterministicSample };
 
 export const TASK_RULES = `
 You are a TEXT TRANSFORMER, not an assistant and not a chatbot.
@@ -135,32 +138,6 @@ NOT templates to copy and NOT lines to reuse verbatim):
 
 ${renderCorpusBlock(picked)}
 `.trim();
-}
-
-/**
- * Seeded sample without replacement. Same seed always yields the same set,
- * which is what makes a permalink reproducible.
- */
-export function deterministicSample<T>(items: T[], count: number, seed: number): T[] {
-	const pool = [...items];
-	const out: T[] = [];
-	let s = seed >>> 0;
-	const next = () => {
-		// xorshift32 — small, fast, and stable across runtimes, which Math.random()
-		// is not. Reproducibility matters more than statistical quality here.
-		s ^= s << 13;
-		s >>>= 0;
-		s ^= s >> 17;
-		s ^= s << 5;
-		s >>>= 0;
-		return s / 0x100000000;
-	};
-	const n = Math.min(count, pool.length);
-	for (let i = 0; i < n; i++) {
-		const idx = Math.floor(next() * pool.length);
-		out.push(pool.splice(idx, 1)[0]);
-	}
-	return out;
 }
 
 /** Assembles the full system prompt. `seed` varies the voice reference sample. */
