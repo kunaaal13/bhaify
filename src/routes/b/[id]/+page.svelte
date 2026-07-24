@@ -59,10 +59,10 @@
 
 	<div class="mt-8 flex flex-wrap items-center gap-2">
 		<button type="button" class="pill-outline" onclick={copyLink}>
-			{copied ? 'Link copy ho gaya' : 'Link copy karo'}
+			{copied ? 'Link copied' : 'Copy link'}
 		</button>
-		<a class="pill-outline inline-block" href="/">Apna banao</a>
-		<a class="pill-outline inline-block" href="/gallery">Darbar</a>
+		<a class="pill-outline inline-block" href="/">Make your own</a>
+		<a class="pill-outline inline-block" href="/wall">Wall</a>
 	</div>
 
 	<div class="mt-16 border-t border-hairline pt-6">
@@ -72,7 +72,7 @@
 			onclick={report}
 			disabled={reported}
 		>
-			{reported ? 'Shikayat pahunch gayi' : 'Shikayat karo'}
+			{reported ? 'Reported' : 'Report'}
 		</button>
 	</div>
 </div>

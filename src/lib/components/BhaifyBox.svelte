@@ -95,7 +95,7 @@
 		</span>
 
 		<button type="submit" class="pill-filled" disabled={!canSubmit}>
-			{pending ? 'Soch raha hoon...' : 'Bhaify karo'}
+			{pending ? 'Soch raha hoon...' : 'Bhaify'}
 		</button>
 	</div>
 </form>

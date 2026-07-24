@@ -82,7 +82,7 @@
 			cursor = next.cursor;
 			hasMore = next.hasMore;
 		} catch {
-			loadError = 'Aur nahi aa paya . Phir se try karo .';
+			loadError = 'Could not load more. Try again.';
 		} finally {
 			loading = false;
 		}
@@ -106,8 +106,8 @@
 </script>
 
 <svelte:head>
-	<title>Logon ne bhai se kya likhwaya — Bhaify</title>
-	<meta name="description" content="Logon ne bhai se kya kya likhwaya hai ." />
+	<title>Wall — Bhaify</title>
+	<meta name="description" content="Everything people have run through bhai." />
 </svelte:head>
 
 <!-- One row shape, used by both the virtualised and the plain path. -->
@@ -124,19 +124,17 @@
 {/snippet}
 
 <div class="mx-auto max-w-3xl px-6 pt-12 pb-6">
-	<h1 class="text-display-sm font-normal text-ink sm:text-display-md">
-		Logon ne bhai se kya likhwaya
-	</h1>
+	<h1 class="text-display-sm font-normal text-ink sm:text-display-md">Logon ne kya likhwaya</h1>
 	<p class="mt-3 text-body-lg text-body">
-		{data.total} baar likhwaya gaya hai . Neeche dekho .
+		{data.total} baar . Neeche sab hai .
 	</p>
 </div>
 
 {#if items.length === 0}
 	<div class="mx-auto max-w-3xl px-6 pb-24">
 		<p class="text-body-md text-body-mid">
-			Abhi tak koi nahi .
-			<a href="/" class="text-ink underline underline-offset-4">Pehle tum likhwao</a> .
+			Nothing yet .
+			<a href="/" class="text-ink underline underline-offset-4">Be the first</a> .
 		</p>
 	</div>
 {:else}
@@ -170,11 +168,11 @@
 			<div class="py-8">
 				{#if loadError}
 					<p class="text-body-sm text-accent-sunset">{loadError}</p>
-					<button type="button" class="pill-outline mt-3" onclick={loadMore}>Phir se</button>
+					<button type="button" class="pill-outline mt-3" onclick={loadMore}>Try again</button>
 				{:else if loading}
-					<p class="font-mono text-caption-mono-sm text-mute">Aur la raha hoon ...</p>
+					<p class="font-mono text-caption-mono-sm text-mute">loading ...</p>
 				{:else if !hasMore}
-					<p class="font-mono text-caption-mono-sm text-mute">Buss . Itna hi hai .</p>
+					<p class="font-mono text-caption-mono-sm text-mute">that's everything</p>
 				{/if}
 			</div>
 		</div>

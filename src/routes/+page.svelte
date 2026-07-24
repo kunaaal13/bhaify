@@ -3,11 +3,23 @@
 	import Marquee from '$lib/components/Marquee.svelte';
 	import TweetCard from '$lib/components/TweetCard.svelte';
 	import { USABLE_CORPUS } from '$lib/persona/corpus';
+	import { DIALOGUES, HERO_DIALOGUE } from '$lib/dialogues';
+	import type { PageData } from './$types';
 
-	/** Highest-engagement posts first — the row should open on the strongest lines. */
+	let { data }: { data: PageData } = $props();
+
 	const ranked = [...USABLE_CORPUS].sort((a, b) => b.likes - a.likes);
 	const rowOne = ranked.slice(0, 14);
 	const rowTwo = ranked.slice(14, 28);
+
+	/** Everything after the hero line. */
+	const restDialogues = DIALOGUES.slice(1);
+
+	const stats = $derived([
+		{ value: data.total.toLocaleString('en-IN'), label: 'lines bhaified' },
+		{ value: String(USABLE_CORPUS.length), label: 'posts in the corpus' },
+		{ value: data.today.toLocaleString('en-IN'), label: 'in the last 24h' }
+	]);
 </script>
 
 <svelte:head>
@@ -15,7 +27,8 @@
 	<meta name="description" content="Kuch bhi likho . Bhai ki zubaan mein wapas milega ." />
 </svelte:head>
 
-<section class="mx-auto max-w-3xl px-6 pt-16 pb-16 sm:pt-24">
+<!-- ── hero ────────────────────────────────────────────────────────────── -->
+<section class="mx-auto max-w-3xl px-6 pt-14 pb-14 sm:pt-20">
 	<div class="flex items-start justify-between gap-8">
 		<div class="min-w-0">
 			<!-- Weight 400 at display size with heavy negative tracking is the whole
@@ -33,14 +46,32 @@
 		/>
 	</div>
 
+	<blockquote class="mt-8 border-l-2 border-accent-sunset pl-5">
+		<p class="text-body-lg text-ink italic">{HERO_DIALOGUE.line}</p>
+		<footer class="mt-2 font-mono text-caption-mono-sm text-mute">
+			{HERO_DIALOGUE.film} &middot; {HERO_DIALOGUE.year}
+		</footer>
+	</blockquote>
+
 	<div class="mt-10">
 		<BhaifyBox />
 	</div>
+
+	<!-- ── stats ───────────────────────────────────────────────────────── -->
+	<dl class="mt-12 grid grid-cols-3 gap-4 border-t border-hairline pt-8">
+		{#each stats as stat (stat.label)}
+			<div>
+				<dt class="text-display-xs font-normal text-ink tabular-nums sm:text-display-sm">
+					{stat.value}
+				</dt>
+				<dd class="mt-1 font-mono text-caption-mono-sm text-mute">{stat.label}</dd>
+			</div>
+		{/each}
+	</dl>
 </section>
 
-<!-- Full-bleed. Breaks out of the page container deliberately — the rows should
-     run edge to edge, not sit inside the reading column. -->
-<section class="pb-24" aria-label="Bhai ne kya kaha">
+<!-- ── corpus marquees, full bleed ─────────────────────────────────────── -->
+<section class="pb-16" aria-label="What bhai actually posted">
 	<p class="mx-auto mb-4 max-w-3xl px-6 text-body-sm text-body-mid">Bhai ne kya kaha ...</p>
 	<Marquee duration={80}>
 		{#each rowOne as tweet (tweet.date + tweet.likes)}
@@ -55,3 +86,49 @@
 		</Marquee>
 	</div>
 </section>
+
+<!-- ── dialogues ───────────────────────────────────────────────────────── -->
+<section class="mx-auto max-w-6xl px-6 pb-20">
+	<div class="mx-auto max-w-3xl">
+		<h2 class="text-display-sm font-normal text-ink">Bhai ke dialogue</h2>
+		<p class="mt-2 text-body-md text-body-mid">Woh lines jo sabko yaad hain .</p>
+	</div>
+
+	<ul class="mt-8 grid gap-4 sm:grid-cols-2">
+		{#each restDialogues as d (d.line)}
+			<li class="card flex flex-col justify-between p-5">
+				<p class="text-body-lg text-ink">{d.line}</p>
+				<p class="mt-4 font-mono text-caption-mono-sm text-mute">
+					{d.film} &middot; {d.year}
+				</p>
+			</li>
+		{/each}
+	</ul>
+</section>
+
+<!-- ── recent, if any ──────────────────────────────────────────────────── -->
+{#if data.latest.length > 0}
+	<section class="mx-auto max-w-3xl px-6 pb-24">
+		<div class="flex items-baseline justify-between border-t border-hairline pt-8">
+			<h2 class="text-body-sm text-body-mid">Abhi abhi</h2>
+			<a
+				href="/wall"
+				class="font-mono text-caption-mono-sm text-mute transition-colors hover:text-body"
+			>
+				See all &rarr;
+			</a>
+		</div>
+		<ul class="mt-2 divide-y divide-hairline">
+			{#each data.latest as item (item.id)}
+				<li>
+					<a
+						href="/b/{item.id}"
+						class="block py-4 text-body-lg text-ink transition-colors hover:text-body"
+					>
+						{item.text}
+					</a>
+				</li>
+			{/each}
+		</ul>
+	</section>
+{/if}
