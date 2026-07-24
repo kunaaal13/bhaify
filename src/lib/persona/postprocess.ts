@@ -34,6 +34,28 @@ export function cleanModelOutput(raw: string): string {
 }
 
 /**
+ * Counts style markers actually present in the finished text.
+ *
+ * Distinct from quirkify's `density`, which measures how many transforms WE
+ * applied. When the model already writes in voice, quirkify has nothing to do
+ * and density is 0 — which reads as "broken" if shown to a user looking at
+ * obviously-styled output. This scores the artefact rather than our activity,
+ * so it stays meaningful either way.
+ */
+export function countStyleMarkers(text: string): number {
+	let n = 0;
+	n += (text.match(/\s[.?!]/g) ?? []).length; // space before terminal punctuation
+	n += (text.match(/,\S/g) ?? []).length; // missing space after comma
+	n += (text.match(/\?\?|!!|\?!/g) ?? []).length; // stacked marks
+	n += (text.match(/\.{3,}|…/g) ?? []).length; // trailing shrug
+	n += (text.match(/(.)\1{2,}/g) ?? []).length; // elongation
+	n += (text.match(/\b(u|ur|n|nt|b|k|hv|bt|jst|coz|plz|wld|vil|kno|thr|abt)\b/gi) ?? []).length;
+	n += (text.match(/aa|oo|uu/g) ?? []).length; // doubled vowels
+	n += (text.match(/\b(he|ha)(he|ha)+\b/gi) ?? []).length; // laughter
+	return n;
+}
+
+/**
  * Which register the output leans toward.
  *
  * A heuristic, and only ever used as display telemetry — nothing branches on it,

@@ -15,10 +15,10 @@ import { screenInput, screenOutput, blockMessage, type BlockReason } from './saf
 import { normalizeInput, buildPrompt } from '$lib/persona/prompt';
 import { quirkify } from '$lib/persona/quirkify';
 import { hashSeed } from '$lib/persona/rng';
-import { cleanModelOutput, inferRegister } from '$lib/persona/postprocess';
+import { cleanModelOutput, inferRegister, countStyleMarkers } from '$lib/persona/postprocess';
 import { generate, NoProviderAvailableError } from '$lib/llm';
 
-export { cleanModelOutput, inferRegister };
+export { cleanModelOutput, inferRegister, countStyleMarkers };
 
 /** Three cached takes per input. "Phir se" advances the slot (PLAN.md §4.2). */
 export const VARIANT_SLOTS = 3;
@@ -31,6 +31,8 @@ export interface BhaifyOutcome {
 		text: string;
 		register: string | null;
 		quirkDensity: number;
+		/** Markers present in the final text — see countStyleMarkers. */
+		markers: number;
 		model: string;
 		latencyMs: number | null;
 		variantSlot: number;
@@ -48,6 +50,7 @@ function toResult(row: Bhaification, cached: boolean): BhaifyOutcome {
 			text: row.outputText,
 			register: row.register,
 			quirkDensity: row.quirkDensity ?? 0,
+			markers: countStyleMarkers(row.outputText),
 			model: row.model,
 			latencyMs: row.latencyMs,
 			variantSlot: row.variantSlot,
