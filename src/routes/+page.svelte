@@ -4,6 +4,7 @@
 	import TweetCard from '$lib/components/TweetCard.svelte';
 	import { USABLE_CORPUS } from '$lib/persona/corpus';
 	import { DIALOGUES, HERO_DIALOGUE } from '$lib/dialogues';
+	import { COPY } from '$lib/copy';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -34,7 +35,8 @@
 			<!-- Weight 400 at display size with heavy negative tracking is the whole
 			     x.ai signature — never bold this. -->
 			<h1 class="text-display-md font-normal text-ink sm:text-display-lg">Bhaify</h1>
-			<p class="mt-4 text-body-lg text-body">Kuch bhi likho . Bhai bana denge .</p>
+			<p class="mt-4 text-body-lg text-body">{COPY.home.tagline}</p>
+			<p class="mt-3 max-w-lg text-body-md text-body-mid">{COPY.home.intro}</p>
 		</div>
 
 		<img
@@ -72,7 +74,10 @@
 
 <!-- ── corpus marquees, full bleed ─────────────────────────────────────── -->
 <section class="pb-16" aria-label="What bhai actually posted">
-	<p class="mx-auto mb-4 max-w-3xl px-6 text-body-sm text-body-mid">Bhai ne kya kaha ...</p>
+	<div class="mx-auto mb-4 flex max-w-3xl flex-wrap items-baseline justify-between gap-2 px-6">
+		<p class="text-body-sm text-body-mid">{COPY.marquee.label}</p>
+		<p class="font-mono text-caption-mono-sm text-mute">{COPY.marquee.note}</p>
+	</div>
 	<Marquee duration={80}>
 		{#each rowOne as tweet (tweet.date + tweet.likes)}
 			<TweetCard {tweet} />
@@ -90,8 +95,8 @@
 <!-- ── dialogues ───────────────────────────────────────────────────────── -->
 <section class="mx-auto max-w-6xl px-6 pb-20">
 	<div class="mx-auto max-w-3xl">
-		<h2 class="text-display-sm font-normal text-ink">Bhai ke dialogue</h2>
-		<p class="mt-2 text-body-md text-body-mid">Woh lines jo sabko yaad hain .</p>
+		<h2 class="text-display-sm font-normal text-ink">{COPY.dialogues.title}</h2>
+		<p class="mt-2 text-body-md text-body-mid">{COPY.dialogues.intro}</p>
 	</div>
 
 	<ul class="mt-8 grid gap-4 sm:grid-cols-2">

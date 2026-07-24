@@ -1,6 +1,7 @@
 <script lang="ts">
 	import TweetCard from '$lib/components/TweetCard.svelte';
 	import { USABLE_CORPUS } from '$lib/persona/corpus';
+	import { COPY } from '$lib/copy';
 
 	/**
 	 * Newest first. CSS columns fill top-to-bottom then wrap to the next column,
@@ -16,10 +17,8 @@
 
 <div class="mx-auto max-w-6xl px-6 pt-12 pb-24">
 	<header class="mx-auto max-w-3xl">
-		<h1 class="text-display-sm font-normal text-ink sm:text-display-md">Bhai ke Dohe</h1>
-		<p class="mt-3 text-body-lg text-body">
-			{dohe.length} dohe . 2010 se ab tak . Sab ek jagah .
-		</p>
+		<h1 class="text-display-sm font-normal text-ink sm:text-display-md">{COPY.dohe.title}</h1>
+		<p class="mt-3 max-w-xl text-body-lg text-body">{COPY.dohe.intro}</p>
 	</header>
 
 	<!--

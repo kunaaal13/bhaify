@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { createVirtualizer } from '@tanstack/svelte-virtual';
+	import { COPY } from '$lib/copy';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -126,14 +127,14 @@
 <div class="mx-auto max-w-3xl px-6 pt-12 pb-6">
 	<h1 class="text-display-sm font-normal text-ink sm:text-display-md">Logon ne kya likhwaya</h1>
 	<p class="mt-3 text-body-lg text-body">
-		{data.total} baar . Neeche sab hai .
+		{COPY.wall.intro}
 	</p>
 </div>
 
 {#if items.length === 0}
 	<div class="mx-auto max-w-3xl px-6 pb-24">
 		<p class="text-body-md text-body-mid">
-			Nothing yet .
+			{COPY.wall.empty}
 			<a href="/" class="text-ink underline underline-offset-4">Be the first</a> .
 		</p>
 	</div>
