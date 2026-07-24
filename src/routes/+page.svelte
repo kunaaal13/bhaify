@@ -48,20 +48,13 @@
 		/>
 	</div>
 
-	<blockquote class="mt-8 flex items-center gap-5">
-		<img
-			src={HERO_DIALOGUE.poster}
-			alt="{HERO_DIALOGUE.film} poster"
-			width="220"
-			height="330"
-			class="h-[108px] w-[72px] shrink-0 rounded-[4px] border border-hairline object-cover"
-		/>
-		<div class="border-l-2 border-accent-sunset pl-5">
-			<p class="text-body-lg text-ink italic">{HERO_DIALOGUE.line}</p>
-			<footer class="mt-2 font-mono text-caption-mono-sm text-mute">
-				{HERO_DIALOGUE.film} &middot; {HERO_DIALOGUE.year}
-			</footer>
-		</div>
+	<!-- Text only. The poster belongs on the dialogue cards below, not here —
+	     the hero should stay quiet. -->
+	<blockquote class="mt-8 border-l-2 border-accent-sunset pl-5">
+		<p class="text-body-lg text-ink italic">{HERO_DIALOGUE.line}</p>
+		<footer class="mt-2 font-mono text-caption-mono-sm text-mute">
+			{HERO_DIALOGUE.film} &middot; {HERO_DIALOGUE.year}
+		</footer>
 	</blockquote>
 
 	<div class="mt-10">
