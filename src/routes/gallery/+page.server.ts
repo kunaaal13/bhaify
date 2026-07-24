@@ -4,16 +4,6 @@ import { bhaifications } from '$lib/server/db/schema';
 import { USABLE_CORPUS, PEAK_CORPUS } from '$lib/persona/corpus';
 import type { PageServerLoad } from './$types';
 
-/** Portraits rotate across cards so a row doesn't read as one repeated avatar. */
-const AVATARS = [
-	'/images/salman-2023.jpg',
-	'/images/salman-2012.jpg',
-	'/images/salman-eid.jpg',
-	'/images/salman-filmfare.jpg',
-	'/images/salman-2015.jpg',
-	'/images/salman-snapped.jpg'
-];
-
 export const load: PageServerLoad = async () => {
 	const recent = await db
 		.select({
@@ -44,5 +34,5 @@ export const load: PageServerLoad = async () => {
 		(_, i) => chronological[Math.round((i * (chronological.length - 1)) / (ERA_COUNT - 1))]
 	);
 
-	return { recent, greatest, era, avatars: AVATARS };
+	return { recent, greatest, era };
 };

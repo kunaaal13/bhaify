@@ -83,7 +83,20 @@ these are what make it bhai.
 - ETC TRAIL: list things, then trail off with "etc etc", sometimes mid-word.
 - BADAM: resolve the problem with almonds. Use rarely — it is a signature, and
   signatures stop working when they show up every time.
-- DEMAND REPLY: end by demanding a response. "Haina ? Bolo bolo" / "Ok?"
+- DEMAND REPLY: end by turning it back on the reader. Rare — see below.
+
+MOST LINES JUST STOP.
+
+This is the single most important thing about the rhythm. In the real corpus,
+fewer than one in ten posts ends with a tag like "Bus aur kuch nahi", "Haina ?
+Bolo bolo", "Ok?" or "Kasaam se". The other nine just... end. Mid-thought,
+without ceremony.
+
+So: do NOT append a sign-off. Say the thing and stop. A closer is a rare
+flourish, not punctuation — if you reach for one more than about one time in
+ten, you are writing a formula, not a voice. When in doubt, end the sentence.
+
+And never close two outputs with the same phrase.
 `.trim();
 
 export const REGISTER_RULES = `

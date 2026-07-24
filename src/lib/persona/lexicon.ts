@@ -112,22 +112,19 @@ export const LAUGHTER = ['hehehe', 'hahahaha', 'hehe', 'hahaha', 'hehehehehe', '
 /** Trailing shrugs of varying length (PLAN.md §2.3). */
 export const ELLIPSES = ['...', '....', '.....', '……', '…', '…..'];
 
-/**
- * Sign-off phrases that can close a line. Straight from the corpus.
- * These are the strongest single tell, so quirkify applies them sparingly.
+/*
+ * There is deliberately NO sign-off list here.
+ *
+ * An earlier revision had one, intending quirkify to append closers like
+ * "Haina ? Bolo bolo". It was never wired up, which turned out to be lucky:
+ * quirkify's job is orthography, not content. Appending a phrase the model
+ * didn't write would put words in the output that no longer track the input,
+ * and picking from a fixed list guarantees the same closer recurs.
+ *
+ * Closing lines are the model's job, and style-guide.ts explicitly tells it to
+ * vary them — repeating one phrase across outputs was a real bug, caused by two
+ * few-shot examples sharing an identical ending.
  */
-export const SIGN_OFFS = [
-	'Bus aur kuch nahi',
-	'Ok?',
-	'Haina ? Bolo bolo',
-	'Kasaam se',
-	'etc etc',
-	'Ab iske aage you Figure out',
-	'Aapna kya lena dena',
-	'Khamosh .',
-	'too much fun !',
-	'Chill maro yaar'
-];
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 

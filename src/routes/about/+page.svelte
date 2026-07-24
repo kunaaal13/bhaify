@@ -1,79 +1,55 @@
 <svelte:head>
-	<title>About — Bhaify</title>
-	<meta
-		name="description"
-		content="What Bhaify is, where the corpus came from, and the fine print."
-	/>
+	<title>Baat cheet — Bhaify</title>
+	<meta name="description" content="Yeh kya hai , kaise chalta hai , aur zaroori baat ." />
 </svelte:head>
 
 <div class="mx-auto max-w-3xl px-6 pt-12 pb-24">
-	<p class="eyebrow">Colophon</p>
-	<h1 class="mt-4 text-display-sm font-normal text-ink sm:text-display-md">About</h1>
+	<h1 class="text-display-sm font-normal text-ink sm:text-display-md">Baat cheet</h1>
 
 	<div class="mt-10 space-y-10">
 		<section>
-			<h2 class="eyebrow">What this is</h2>
+			<p class="text-body-sm text-body-mid">Yeh hai kya</p>
 			<p class="mt-3 text-body-lg text-body">
-				A text transformer. You type a message, it comes back rewritten in a Hinglish "bhai" voice.
-				It is not a chatbot — it never answers your message, only re-voices it.
+				Kuch bhi likho . Wahi baat bhai ki zubaan mein wapas milegi . Yeh chat nahi hai — tumhare
+				message ka jawaab nahi deta , sirf usko dobara bolta hai .
 			</p>
 		</section>
 
 		<section>
-			<h2 class="eyebrow">How it works</h2>
+			<p class="text-body-sm text-body-mid">Kaise chalta hai</p>
 			<p class="mt-3 text-body-md text-body">
-				A language model does the rewriting, guided by a style guide and a set of examples derived
-				from a corpus of 52 real posts. A second, deterministic pass then applies the orthography —
-				the SMS-era compression, the doubled Hindi vowels, the space before a full stop. Language
-				models consistently under-apply those tics and drift back toward clean prose, so they are
-				forced in code rather than hoped for in the prompt.
+				Ek language model likhta hai , 52 purane posts se seekhe hue andaaz mein . Uske baad code ka
+				ek aur round chalta hai jo spelling theek karta hai — u , n , nt , aur Hindi ke doubled
+				vowels . Model yeh cheezein kam laga deta hai aur dheere dheere saaf angrezi pe wapas chala
+				jaata hai , isliye woh kaam code se karwaya jaata hai .
 			</p>
 			<p class="mt-3 text-body-md text-body">
-				Every result is deterministic: the same input always produces the same three variants, which
-				is what lets a share link keep working.
+				Ek hi input se hamesha wahi teen jawaab aate hain . Isiliye share link kabhi badalta nahi .
 			</p>
 		</section>
 
 		<section>
-			<h2 class="eyebrow">Corpus</h2>
-			<p class="mt-3 text-body-md text-body">
-				The 52 reference posts were collected by
-				<a
-					href="https://apnakyalenadena.com"
-					class="text-ink underline underline-offset-4"
-					rel="noopener"
-				>
-					apnakyalenadena.com</a
-				>, a fan project by Zaid. Credit to them — this would not exist otherwise.
-			</p>
-		</section>
-
-		<section>
-			<h2 class="eyebrow">Photos</h2>
-			<p class="mt-3 text-body-md text-body">
-				All photographs come from Wikimedia Commons under Creative Commons licences, credited to
-				<span class="text-ink">Bollywood Hungama</span> (CC BY 3.0). They are not press-agency
-				images. Full provenance is recorded in <code class="text-ink">ASSETS.md</code> in the repository.
-			</p>
-		</section>
-
-		<!-- The disclaimer that does the actual work. Prominent, not buried. -->
-		<section class="card p-6">
-			<h2 class="eyebrow">Fine print</h2>
-			<p class="mt-3 text-body-md text-ink">
-				Bhaify is a fan parody project. It is <strong class="font-normal"
-					>not affiliated with, endorsed by, or associated with Salman Khan</strong
-				>, or with any studio, production house, or platform.
-			</p>
-			<p class="mt-3 text-body-md text-body">
-				Nothing this site generates was written or said by him. Outputs are machine-generated parody
-				in an imitated style, and are labelled as such wherever they can be shared.
-			</p>
-			<p class="mt-3 text-body-md text-body">
-				Submitted text is stored so share links keep working, along with a hashed IP for rate
-				limiting. Raw IP addresses are never stored. Anything on the gallery can be reported and
-				removed.
-			</p>
+			<p class="text-body-sm text-body-mid">Zaroori baat</p>
+			<div class="card mt-3 p-6">
+				<!-- Deliberately plain English. This paragraph is the thing that
+				     separates parody from passing-off, and it only works if it is
+				     unambiguous to a reader who does not speak Hinglish. -->
+				<p class="text-body-md text-ink">
+					Bhaify is a fan parody project. It is
+					<strong class="font-normal"
+						>not affiliated with, endorsed by, or associated with Salman Khan</strong
+					>, or with any studio, production house, or platform.
+				</p>
+				<p class="mt-3 text-body-md text-body">
+					Nothing this site generates was written or said by him. Every output is machine-generated
+					parody in an imitated style, and is labelled as such wherever it can be shared.
+				</p>
+				<p class="mt-3 text-body-md text-body">
+					Submitted text is stored so share links keep working, along with a hashed IP address for
+					rate limiting. Raw IP addresses are never stored. Anything shown publicly can be reported
+					and removed.
+				</p>
+			</div>
 		</section>
 	</div>
 </div>

@@ -18,15 +18,15 @@
 
 	const cells = $derived(
 		[
-			register ? { label: 'Register', value: register.replace(/-/g, ' ') } : null,
-			{ label: 'Markers', value: String(markers) },
-			{ label: 'Model', value: model },
+			register ? { label: 'Andaaz', value: register.replace(/-/g, ' ') } : null,
+			{ label: 'Nishaan', value: String(markers) },
+			{ label: 'Dimaag', value: model },
 			// A cache hit has no meaningful latency — showing the original call's
 			// duration would be a lie about this request.
 			cached
-				? { label: 'Served', value: 'cache' }
+				? { label: 'Kahan se', value: 'yaad se' }
 				: latencyMs != null
-					? { label: 'Latency', value: `${latencyMs}ms` }
+					? { label: 'Waqt', value: `${latencyMs}ms` }
 					: null
 		].filter((c) => c !== null)
 	);

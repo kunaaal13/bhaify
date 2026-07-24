@@ -15,10 +15,10 @@
 			<a href="/" class="text-body-sm text-ink">Bhaify</a>
 			<div class="flex items-center gap-6">
 				<a href="/gallery" class="text-body-sm text-body-mid transition-colors hover:text-ink">
-					Gallery
+					Darbar
 				</a>
 				<a href="/about" class="text-body-sm text-body-mid transition-colors hover:text-ink">
-					About
+					Baat cheet
 				</a>
 			</div>
 		</nav>

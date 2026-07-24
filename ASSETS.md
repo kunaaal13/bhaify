@@ -1,29 +1,28 @@
 # Image provenance
 
-Every image in `static/images/` is sourced from **Wikimedia Commons** under a
-free licence, not from image search or a press agency.
+| File                              | Source                        | Notes                                                                |
+| --------------------------------- | ----------------------------- | -------------------------------------------------------------------- |
+| `static/images/salman-avatar.png` | Supplied by the project owner | 48×48. The single avatar on every tweet card, and the hero portrait. |
 
-That is a deliberate choice. Press and event photography carries its own
-copyright held by the photographer or agency (Getty, PTI, and others), entirely
-separate from any personality-rights question about the subject — and agencies
-enforce it. Commons images are licensed for reuse, so the only obligation is
-attribution, which this file discharges. See PLAN.md §8.
+That is the only image in the project.
 
-Most of these are **CC BY 3.0**, which _requires_ visible credit. The `/about`
-page carries that credit; do not remove it.
+## Why only one
 
-| File                  | Source                                                                                             | Licence   | Credit            |
-| --------------------- | -------------------------------------------------------------------------------------------------- | --------- | ----------------- |
-| `salman-2015.jpg`     | [Commons](https://commons.wikimedia.org/wiki/File%3ASalman_Khan_2015.jpg)                          | CC BY 3.0 | Bollywood Hungama |
-| `salman-filmfare.jpg` | [Commons](https://commons.wikimedia.org/wiki/File%3ASalman_Khan_filmfare.jpg)                      | CC BY 3.0 | Bollywood Hungama |
-| `salman-2023.jpg`     | [Commons](https://commons.wikimedia.org/wiki/File%3ASalman_Khan_in_2023_%281%29_%28cropped%29.jpg) | CC BY 3.0 | Bollywood Hungama |
-| `salman-2012.jpg`     | [Commons](https://commons.wikimedia.org/wiki/File%3ASalman_Khan_in_May_2012.jpg)                   | CC BY 3.0 | Bollywood Hungama |
-| `salman-eid.jpg`      | [Commons](https://commons.wikimedia.org/wiki/File%3ASalman_Khan_on_Eid.jpg)                        | CC BY 3.0 | Bollywood Hungama |
-| `salman-snapped.jpg`  | [Commons](https://commons.wikimedia.org/wiki/File%3ASalman_Khan_snapped_1.jpg)                     | CC BY 3.0 | Bollywood Hungama |
+An earlier revision pulled six portraits from Wikimedia Commons under CC BY.
+Those were removed at the owner's request in favour of one consistent avatar —
+which is also the better call visually, since every card represents posts by the
+same account and rotating portraits read as different people.
 
-## Adding more
+Removing them also removed the CC BY attribution obligation those images carried,
+so `/about` no longer needs a photo credit.
 
-Search Commons, not the open web:
+## If you add more
+
+Prefer **Wikimedia Commons** over image search. Press and event photography
+carries its own copyright held by the photographer or agency (Getty, PTI, and
+others) entirely separately from any personality-rights question about the
+subject, and agencies do enforce it. Commons images are licensed for reuse and
+only require attribution.
 
 ```bash
 curl -A "YourApp/1.0 (contact@example.com)" \
@@ -32,5 +31,7 @@ curl -A "YourApp/1.0 (contact@example.com)" \
 
 Wikimedia returns 403 without a descriptive User-Agent — set one.
 
-Record every new file in the table above with its licence and credit. An image
-without a row here should be treated as unlicensed and removed.
+Record every new file in the table above with its source and licence. Any image
+without a row here should be treated as unlicensed and removed. If you add a
+CC BY image, its credit must appear somewhere user-visible — that is a licence
+condition, not a courtesy.

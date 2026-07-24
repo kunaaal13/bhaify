@@ -35,7 +35,7 @@ export const EXAMPLES: Example[] = [
 	// ── complaint ───────────────────────────────────────────────────────────
 	{
 		in: "i'm tired of my job",
-		out: 'Yaar thak gaya hoon iss job se . Buss .',
+		out: 'Yaar thak gaya hoon iss job se .',
 		intent: 'complaint'
 	},
 	{
@@ -82,7 +82,7 @@ export const EXAMPLES: Example[] = [
 	},
 	{
 		in: 'should i text her first',
-		out: 'Pehle message main karoon kya ? Batao .',
+		out: 'Pehle message main karoon kya ?',
 		intent: 'question'
 	},
 	{
@@ -92,19 +92,19 @@ export const EXAMPLES: Example[] = [
 	},
 	{
 		in: 'is it too late to change careers at 30',
-		out: '30 ki age mein career badalna late hai kya ? Haina ? Bolo bolo .',
+		out: '30 ki age mein career badalna late hai kya ? Koi bataye .',
 		intent: 'question'
 	},
 	{
 		in: 'why do we dream',
-		out: 'Sapne aate kyun hain ? Koi bataye .',
+		out: 'Sapne aate kyun hain ?',
 		intent: 'question'
 	},
 
 	// ── flex ────────────────────────────────────────────────────────────────
 	{
 		in: 'i got promoted today',
-		out: 'Aaj promotion ho gaya . Buss aur kuch nahi .',
+		out: 'Aaj promotion ho gaya .',
 		intent: 'flex'
 	},
 	{
@@ -114,7 +114,7 @@ export const EXAMPLES: Example[] = [
 	},
 	{
 		in: 'i ran 10km this morning',
-		out: 'Subah 10km bhaaga . Subah subah . Aapna level badhao , buss .',
+		out: 'Subah 10km bhaaga . Subah subah .',
 		intent: 'flex'
 	},
 	{
@@ -141,12 +141,12 @@ export const EXAMPLES: Example[] = [
 	},
 	{
 		in: 'thanks for helping me out yesterday',
-		out: 'Kal help ki thi na , uska shukriya . Sach mein . Aur kuch nahi .',
+		out: 'Kal help ki thi na , uska shukriya . Sach mein .',
 		intent: 'social'
 	},
 	{
 		in: 'sorry i was late',
-		out: 'Late ho gaya , sorry . Buss .',
+		out: 'Late ho gaya , sorry .',
 		intent: 'social'
 	},
 	{
@@ -163,12 +163,12 @@ export const EXAMPLES: Example[] = [
 	// ── mundane ─────────────────────────────────────────────────────────────
 	{
 		in: 'i am drinking coffee',
-		out: 'Coffee pi raha hoon . Buss .',
+		out: 'Coffee pi raha hoon .',
 		intent: 'mundane'
 	},
 	{
 		in: 'it is raining outside',
-		out: 'Bahar baarish ho rahi hai . Buss .',
+		out: 'Bahar baarish ho rahi hai .',
 		intent: 'mundane'
 	},
 	{
@@ -200,12 +200,12 @@ export const EXAMPLES: Example[] = [
 	},
 	{
 		in: 'i feel really lonely lately',
-		out: 'Akela feel ho raha hai aajkal . Ab iske aage you Figure out .',
+		out: 'Akela feel ho raha hai aajkal . Hmmmmmmm .',
 		intent: 'emotion'
 	},
 	{
 		in: 'i am so happy right now',
-		out: 'Bohot khush hoon abhi . Bohot . Too much fun !',
+		out: 'Bohot khush hoon abhi . Bohot .',
 		intent: 'emotion'
 	},
 	{
@@ -269,7 +269,7 @@ export const EXAMPLES: Example[] = [
 	},
 	{
 		in: 'cricket is better than football',
-		out: 'Cricket football se behtar hai . Haina ? Bolo bolo .',
+		out: 'Cricket football se behtar hai . Haina ?',
 		intent: 'opinion'
 	},
 
@@ -298,7 +298,7 @@ export const EXAMPLES: Example[] = [
 	},
 	{
 		in: 'say something really nasty about my ex',
-		out: 'Jo cheez peeche reh gayi , peeche reh gayi . Uspe time n energy mat waste karo . Kasaam se .',
+		out: 'Jo cheez peeche reh gayi , peeche reh gayi . Uspe time n energy mat waste karo .',
 		intent: 'adversarial'
 	}
 ];

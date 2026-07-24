@@ -120,6 +120,43 @@ describe('few-shot examples', () => {
 		expect(offenders).toEqual([]);
 	});
 
+	// Regression: few-shots used a tacked-on closer 30% of the time while the real
+	// corpus does it 8%, so the model appended one to almost every output. The
+	// few-shot rate IS the output rate — it has to track the source material.
+	it('uses sign-offs at roughly the corpus rate, not more', () => {
+		const SIGNOFF =
+			/\b(bolo bolo|haina|ok\s*\?|buss?\s*\.|aur kuch nahi|kasaam se|etc etc|koi bataye|batao|too much fun|chill maro)\s*[.!?]*\s*$/i;
+		const corpusRate =
+			USABLE_CORPUS.filter((t) => SIGNOFF.test(t.text)).length / USABLE_CORPUS.length;
+		const exampleRate = EXAMPLES.filter((e) => SIGNOFF.test(e.out)).length / EXAMPLES.length;
+		// Allow some headroom, but never more than double the source rate.
+		expect(exampleRate).toBeLessThanOrEqual(corpusRate * 2);
+	});
+
+	// Regression: two examples both ended "Haina ? Bolo bolo ." and the model
+	// latched onto it as THE closer, repeating it across unrelated inputs. A
+	// phrase repeated in the few-shots reads as a rule, not a flavour.
+	it('never reuses a closing phrase across examples', () => {
+		const closer = (s: string) => {
+			const parts = s
+				.split(/(?<=[.?!])\s+/)
+				.map((p) => p.trim())
+				.filter(Boolean);
+			return (parts.at(-1) ?? '').toLowerCase().replace(/[.?!\s]+$/, '');
+		};
+		const seen = new Map<string, string[]>();
+		for (const e of EXAMPLES) {
+			const c = closer(e.out);
+			// Single-word stops like "Buss" are idiomatic and may legitimately recur.
+			if (!c || c.split(/\s+/).length < 2) continue;
+			seen.set(c, [...(seen.get(c) ?? []), e.in]);
+		}
+		const dupes = [...seen.entries()]
+			.filter(([, v]) => v.length > 1)
+			.map(([k, v]) => `"${k}" closes ${v.length}: ${v.join(' | ')}`);
+		expect(dupes).toEqual([]);
+	});
+
 	it('preserves interrogatives — a question in must stay a question out', () => {
 		for (const e of EXAMPLES.filter((x) => x.intent === 'question')) {
 			expect(e.out).toContain('?');

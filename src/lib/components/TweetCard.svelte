@@ -3,11 +3,9 @@
 
 	interface Props {
 		tweet: CorpusTweet;
-		/** Rotating portrait, so the row doesn't read as one repeated avatar. */
-		avatar: string;
 	}
 
-	let { tweet, avatar }: Props = $props();
+	let { tweet }: Props = $props();
 
 	const year = $derived(tweet.date.slice(0, 4));
 	const likes = $derived(
@@ -17,11 +15,15 @@
 
 <article class="card flex w-[300px] shrink-0 snap-start flex-col p-5 sm:w-[340px]">
 	<header class="flex items-center gap-3">
+		<!-- One consistent avatar across every card: these are all posts by the same
+		     account, so rotating portraits read as different people. -->
 		<img
-			src={avatar}
+			src="/images/salman-avatar.png"
 			alt=""
+			width="36"
+			height="36"
 			loading="lazy"
-			class="h-9 w-9 rounded-full object-cover object-top grayscale"
+			class="h-9 w-9 shrink-0 rounded-full object-cover"
 		/>
 		<div class="min-w-0">
 			<p class="truncate text-body-sm text-ink">Salman Khan</p>

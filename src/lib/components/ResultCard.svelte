@@ -45,14 +45,14 @@
 	{#if showActions}
 		<div class="mt-5 flex flex-wrap items-center gap-2">
 			<button type="button" class="pill-outline" onclick={copy}>
-				{copied ? 'Copy ho gaya' : 'Copy'}
+				{copied ? 'Copy ho gaya' : 'Copy karo'}
 			</button>
 			{#if onRegenerate}
 				<button type="button" class="pill-outline" onclick={onRegenerate} disabled={regenerating}>
-					{regenerating ? 'Ruko...' : 'Phir se bol bhai'}
+					{regenerating ? 'Ruko zara...' : 'Phir se bol bhai'}
 				</button>
 			{/if}
-			<a class="pill-outline inline-block" href="/b/{result.id}">Share</a>
+			<a class="pill-outline inline-block" href="/b/{result.id}">Aage bhejo</a>
 		</div>
 	{/if}
 </article>
