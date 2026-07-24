@@ -1,0 +1,163 @@
+@import 'tailwindcss';
+
+/* Variable fonts. Universal Sans (xAI's display face) is proprietary — Geist is
+   the substitute per PLAN §3.3. The negative tracking below is what actually
+   carries the look, more than the specific typeface. */
+@import '@fontsource-variable/geist/index.css';
+@import '@fontsource-variable/geist-mono/index.css';
+
+/* Design tokens transcribed from DESIGN.md (x.ai). Keep in sync with that file. */
+@theme {
+	/* ── Surface ───────────────────────────────────────────── */
+	--color-canvas: #0a0a0a;
+	--color-canvas-soft: #1a1c20;
+	--color-canvas-card: #191919;
+	--color-canvas-mid: #363a3f;
+	--color-hairline: #212327;
+
+	/* ── Text ──────────────────────────────────────────────── */
+	--color-ink: #ffffff;
+	--color-ink-hover: #fafaf7;
+	--color-body: #dadbdf;
+	--color-body-mid: #7d8187;
+	--color-mute: #7d8187;
+
+	/* ── Brand ─────────────────────────────────────────────── */
+	--color-primary: #ffffff;
+	--color-on-primary: #0a0a0a;
+
+	/* ── Accents. Only accent-sunset is used, on the one CTA (PLAN §3.4). ── */
+	--color-accent-sunset: #ff7a17;
+	--color-accent-sunset-soft: #ffc285;
+	--color-accent-dusk: #7c3aed;
+	--color-accent-twilight: #c4b5fd;
+	--color-accent-breeze: #a0c3ec;
+	--color-accent-midnight: #0d1726;
+
+	/* ── Type ladder. Display is weight 400 throughout — the restraint is
+	     part of the voice; never bold a display headline. ───────── */
+	--font-display: 'Geist Variable', Inter, system-ui, -apple-system, sans-serif;
+	--font-sans: 'Geist Variable', Inter, system-ui, -apple-system, sans-serif;
+	--font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+	--text-display-xl: 96px;
+	--text-display-xl--line-height: 96px;
+	--text-display-xl--letter-spacing: -2.4px;
+	--text-display-lg: 72px;
+	--text-display-lg--line-height: 72px;
+	--text-display-lg--letter-spacing: -1.8px;
+	--text-display-md: 48px;
+	--text-display-md--line-height: 48px;
+	--text-display-md--letter-spacing: -1.2px;
+	--text-display-sm: 32px;
+	--text-display-sm--line-height: 36px;
+	--text-display-sm--letter-spacing: -0.6px;
+	--text-display-xs: 20px;
+	--text-display-xs--line-height: 28px;
+
+	--text-body-lg: 18px;
+	--text-body-lg--line-height: 28px;
+	--text-body-md: 16px;
+	--text-body-md--line-height: 24px;
+	--text-body-sm: 14px;
+	--text-body-sm--line-height: 20px;
+
+	/* Mono captions are always uppercase + positively tracked — they read as
+	   code comments rather than marketing labels. See .eyebrow below. */
+	--text-caption-mono: 14px;
+	--text-caption-mono--line-height: 20px;
+	--text-caption-mono--letter-spacing: 1.4px;
+	--text-caption-mono-sm: 12px;
+	--text-caption-mono-sm--line-height: 16px;
+	--text-caption-mono-sm--letter-spacing: 1.2px;
+
+	/* ── Shape. Cards 8px, everything interactive is a pill. No shadows anywhere. ── */
+	--radius-sm: 8px;
+	--radius-pill: 9999px;
+
+	/* ── Spacing scale from DESIGN.md ──────────────────────── */
+	--spacing-xxs: 2px;
+	--spacing-xs: 4px;
+	--spacing-sm: 8px;
+	--spacing-md: 12px;
+	--spacing-lg: 16px;
+	--spacing-xl: 24px;
+	--spacing-2xl: 32px;
+	--spacing-3xl: 48px;
+	--spacing-4xl: 64px;
+}
+
+@layer base {
+	html {
+		background-color: var(--color-canvas);
+		color-scheme: dark;
+	}
+
+	body {
+		background-color: var(--color-canvas);
+		color: var(--color-ink);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+	}
+
+	::selection {
+		background-color: var(--color-accent-sunset);
+		color: var(--color-on-primary);
+	}
+
+	:focus-visible {
+		outline: 1px solid var(--color-ink);
+		outline-offset: 2px;
+	}
+}
+
+@layer components {
+	/* Mono eyebrow — uppercase, tracked. Used for section labels and telemetry. */
+	.eyebrow {
+		font-family: var(--font-mono);
+		font-size: var(--text-caption-mono-sm);
+		line-height: 16px;
+		letter-spacing: 1.2px;
+		text-transform: uppercase;
+		color: var(--color-mute);
+	}
+
+	/* The single filled CTA on the site (PLAN §3.4). */
+	.pill-filled {
+		border-radius: var(--radius-pill);
+		background-color: var(--color-primary);
+		color: var(--color-on-primary);
+		border: 1px solid var(--color-primary);
+		padding: var(--spacing-md) var(--spacing-xl);
+		font-size: var(--text-body-sm);
+		transition: opacity 150ms ease;
+	}
+	.pill-filled:hover:not(:disabled) {
+		opacity: 0.88;
+	}
+	.pill-filled:disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+	}
+
+	/* Every other interactive element. */
+	.pill-outline {
+		border-radius: var(--radius-pill);
+		background-color: transparent;
+		color: var(--color-ink);
+		border: 1px solid rgb(255 255 255 / 0.25);
+		padding: var(--spacing-sm) var(--spacing-lg);
+		font-size: var(--text-body-sm);
+		transition: border-color 150ms ease;
+	}
+	.pill-outline:hover:not(:disabled) {
+		border-color: rgb(255 255 255 / 0.5);
+	}
+
+	/* Card chrome: 8px, hairline border, flat fill, no shadow. */
+	.card {
+		border-radius: var(--radius-sm);
+		background-color: var(--color-canvas-card);
+		border: 1px solid var(--color-hairline);
+	}
+}
