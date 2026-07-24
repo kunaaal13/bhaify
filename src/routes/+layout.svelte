@@ -1,6 +1,20 @@
 <script lang="ts">
 	import './layout.css';
 	import { page } from '$app/state';
+	import { dev } from '$app/environment';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+
+	/**
+	 * Vercel Analytics. Runs once at module load, in the root layout, so it
+	 * covers every route.
+	 *
+	 * `mode` is set explicitly: in dev it logs to the console instead of sending
+	 * beacons, so local clicking around doesn't pollute production numbers.
+	 *
+	 * Page URLs here contain a bhaification id (/b/[id]) but no user text, so
+	 * nothing a visitor typed is sent to the analytics endpoint.
+	 */
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	let { children } = $props();
 
