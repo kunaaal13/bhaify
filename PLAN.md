@@ -230,12 +230,12 @@ Every rate is a named constant in one config object, so the whole feel is tunabl
 
 ```ts
 const PROVIDERS = [
-  { name: 'gemini-2.5-flash',
+  { name: 'gemini-flash-lite',
     baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
-    model: 'gemini-2.5-flash', key: env.GEMINI_API_KEY },
-  { name: 'llama-3.3-70b',
+    model: 'gemini-flash-lite-latest', key: env.GEMINI_API_KEY },
+  { name: 'gemma-4-31b',
     baseURL: 'https://openrouter.ai/api/v1/',
-    model: 'meta-llama/llama-3.3-70b-instruct:free', key: env.OPENROUTER_API_KEY },
+    model: 'google/gemma-4-31b-it:free', key: env.OPENROUTER_API_KEY },
 ]
 // POST {baseURL}chat/completions
 //   { model, messages:[{role:'system'},{role:'user'}], temperature, max_tokens }
@@ -245,7 +245,13 @@ const PROVIDERS = [
 
 Needs a per-request `AbortController` (~15s) and must record the serving provider in `bhaifications.model`, so you can see how often the free tier runs dry.
 
-**Verify in Phase 1:** Google labels the OpenAI-compat layer beta. One curl confirms system-prompt + temperature behave. If it disappoints, the fix is a single adapter reshaping the Gemini request to native format — the table and fallback loop are unchanged.
+**Model choices — corrected against live APIs, 2026-07-24.** Both models named in the original concept doc are now unusable, so verify before trusting any model slug in a plan:
+
+- `gemini-2.5-flash` **404s**: *"no longer available to new users."* The OpenAI-compat layer itself works fine — this was a model-level failure, not a path failure.
+- `gemini-flash-latest` (the obvious replacement) is a **thinking model**: it spent **301 hidden reasoning tokens** to produce a 16-token line (344 total vs lite's 64). For a one-line rewrite that's ~5x cost and latency for no quality gain, and it would silently truncate against our `max_tokens`. **Use `gemini-flash-lite-latest`.**
+- `meta-llama/llama-3.3-70b-instruct:free` **is no longer free** — OpenRouter returns *"use the paid slug instead."* Replaced with `google/gemma-4-31b-it:free` (shares Gemini's lineage, handles Hinglish well). The free Nemotron models were skipped deliberately, per the original doc's own note that they're tuned for reasoning and tool-use rather than character voice.
+
+Free-tier slugs change without notice; re-run the check if output quality drifts.
 
 ---
 
