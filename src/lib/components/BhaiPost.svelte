@@ -46,14 +46,9 @@
 	</p>
 
 	{#if actions || footer}
+		<!-- No bhaify mark here: on-site you already know where you are. It stays
+		     on the OG image, which travels without that context. -->
 		<div class="mt-6 border-t border-hairline pt-5">
-			<!-- Same mark as the share image, so the card is recognisably ours in
-			     both places. -->
-			<div class="mb-4 flex items-center gap-2">
-				<span class="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-sunset"></span>
-				<span class="text-body-sm text-body-mid">bhaify</span>
-			</div>
-
 			{#if actions}
 				<div class="flex flex-wrap items-center gap-2">
 					{@render actions()}
