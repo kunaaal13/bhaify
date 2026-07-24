@@ -5,27 +5,22 @@
 | `static/images/salman-avatar.jpg`  | `pbs.twimg.com` — the @BeingSalmanKhan profile picture, full-size original | 400×400. The single avatar everywhere: tweet cards, header, hero, and the OG share card.                                               |
 | `src/lib/assets/salman-avatar.jpg` | Same file                                                                  | Duplicated into `src/` so Vite can inline it as a data URI for the OG renderer, which has no network access and cannot read `static/`. |
 
-## Film posters
+## Film posters — removed
 
-`static/images/films/*.jpg` — ten posters (Kick, Wanted, Dabangg, Dabangg 2,
-Bodyguard, Ready, Tere Naam, Jai Ho, Saajan, Andaz Apna Apna), sourced from the
-corresponding English Wikipedia articles.
+A revision briefly added ten film posters to the dialogue cards, pulled from
+English Wikipedia. They were removed: the dialogues now render as plain
+blockquotes.
 
-**These are not free images.** Wikipedia hosts them under a **fair use / non-free**
-rationale written for the encyclopedia article specifically; that rationale does
-not transfer to this site. Copyright sits with the studios and distributors, not
-Wikipedia. They are used here as thumbnail-scale illustration alongside quoted
-dialogue on a non-commercial fan page — common fan-site practice, but a
-materially different risk class from the avatar, since posters are studios'
-commercial marketing assets and studios do issue takedowns.
+Worth recording why, in case anyone considers adding them back. Those posters
+are **fair use / non-free** on Wikipedia — hosted under a rationale written for
+the encyclopedia article, which does not transfer to another site. Copyright
+sits with the studios, and posters are commercial marketing assets that studios
+do enforce, unlike a profile photograph.
 
-The clean alternative is **TMDB**: a free API key, and their terms explicitly
-permit poster use in applications provided you display "This product uses the
-TMDB API but is not endorsed or certified by TMDB." Swapping is a small change —
-the poster path is one field on each entry in `src/lib/dialogues.ts`.
-
-Kept at Wikipedia's deliberately low resolution (~220–260px wide), which is
-ample at the ~88px display size and keeps the fair-use posture defensible.
+If film imagery is ever wanted, use **TMDB** rather than Wikipedia: a free API
+key, and terms that explicitly permit poster use in applications provided the
+page displays "This product uses the TMDB API but is not endorsed or certified
+by TMDB."
 
 ## Resolution
 

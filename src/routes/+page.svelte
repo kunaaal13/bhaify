@@ -24,8 +24,8 @@
 </script>
 
 <svelte:head>
-	<title>Bhaify — kuch bhi likho , bhai bana denge</title>
-	<meta name="description" content="Kuch bhi likho . Bhai ki zubaan mein wapas milega ." />
+	<title>Bhaify — tumhara text , bhai ka keypad</title>
+	<meta name="description" content="Tumhara text . Bhai ka keypad ." />
 </svelte:head>
 
 <!-- ── hero ────────────────────────────────────────────────────────────── -->
@@ -101,25 +101,19 @@
 		<p class="mt-2 text-body-md text-body-mid">{COPY.dialogues.intro}</p>
 	</div>
 
-	<ul class="mt-8 grid gap-4 sm:grid-cols-2">
+	<!-- Blockquotes, no imagery. Same accent rule as the hero quote, so the two
+	     read as one family. -->
+	<ul class="mt-8 grid gap-x-10 gap-y-8 sm:grid-cols-2">
 		{#each restDialogues as d (d.line)}
-			<li class="card flex gap-5 overflow-hidden p-5">
-				<!-- 2:3 poster crop. Fixed width so every card's text column starts at
-				     the same place regardless of the source poster's aspect ratio. -->
-				<img
-					src={d.poster}
-					alt="{d.film} poster"
-					width="220"
-					height="330"
-					loading="lazy"
-					class="h-[132px] w-[88px] shrink-0 rounded-[4px] border border-hairline object-cover"
-				/>
-				<div class="flex min-w-0 flex-col justify-between">
-					<p class="text-body-md text-ink">{d.line}</p>
-					<p class="mt-3 font-mono text-caption-mono-sm text-mute">
+			<li>
+				<blockquote
+					class="border-l-2 border-hairline pl-5 transition-colors hover:border-accent-sunset"
+				>
+					<p class="text-body-lg text-ink italic">{d.line}</p>
+					<footer class="mt-2 font-mono text-caption-mono-sm text-mute">
 						{d.film} &middot; {d.year}
-					</p>
-				</div>
+					</footer>
+				</blockquote>
 			</li>
 		{/each}
 	</ul>

@@ -12,9 +12,10 @@
 
 export const COPY = {
 	home: {
-		// Parallel construction, four words, his punctuation. Says exactly what the
-		// product does without describing it — "yours in, his out".
-		tagline: 'Tumhari baat . Bhai ki zubaan .',
+		// "keypad", not "zubaan": concrete, and it points at the exact thing that
+		// makes the voice — a physical-keypad phone at 2am, which is where the
+		// typos and the compression come from.
+		tagline: 'Tumhara text . Bhai ka keypad .',
 		intro:
 			'Write one line. Get back what he would have sent at 2am — unspellchecked, unexplained, unbothered.'
 	},
