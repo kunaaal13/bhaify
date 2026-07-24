@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import BhaiPost from './BhaiPost.svelte';
 	import type { BhaifyResult } from '$lib/types';
 
 	interface Props {
@@ -20,9 +21,8 @@
 	let timer: ReturnType<typeof setTimeout>;
 
 	async function copy(what: Exclude<Flash, null>) {
-		const value = what === 'link' ? shareUrl : result.text;
 		try {
-			await navigator.clipboard.writeText(value);
+			await navigator.clipboard.writeText(what === 'link' ? shareUrl : result.text);
 			flashed = what;
 			clearTimeout(timer);
 			timer = setTimeout(() => (flashed = null), 1800);
@@ -32,7 +32,6 @@
 		}
 	}
 
-	/** Native share sheet on mobile; the copy buttons remain the desktop path. */
 	const canShare = $derived(
 		typeof navigator !== 'undefined' && typeof navigator.share === 'function'
 	);
@@ -46,35 +45,34 @@
 	}
 </script>
 
-<!-- Card chrome per DESIGN.md: 8px radius, hairline border, flat fill, no shadow. -->
-<article class="card p-6">
-	<p class="text-body-lg whitespace-pre-wrap text-ink">{result.text}</p>
+{#snippet actions()}
+	<button type="button" class="pill-filled" onclick={() => copy('link')}>
+		{flashed === 'link' ? 'Link copied' : 'Copy link'}
+	</button>
 
-	{#if showActions}
-		<div class="mt-6 flex flex-wrap items-center gap-2 border-t border-hairline pt-5">
-			<button type="button" class="pill-filled" onclick={() => copy('link')}>
-				{flashed === 'link' ? 'Link copied' : 'Copy link'}
-			</button>
+	<button type="button" class="pill-outline" onclick={() => copy('text')}>
+		{flashed === 'text' ? 'Copied' : 'Copy text'}
+	</button>
 
-			<button type="button" class="pill-outline" onclick={() => copy('text')}>
-				{flashed === 'text' ? 'Copied' : 'Copy text'}
-			</button>
-
-			{#if onRegenerate}
-				<button type="button" class="pill-outline" onclick={onRegenerate} disabled={regenerating}>
-					{regenerating ? 'Working...' : 'Try again'}
-				</button>
-			{/if}
-
-			{#if canShare}
-				<button type="button" class="pill-outline" onclick={nativeShare}>Share</button>
-			{/if}
-
-			<a class="pill-outline inline-block" href={imageUrl} target="_blank" rel="noopener">
-				Image
-			</a>
-		</div>
-
-		<p class="mt-3 font-mono text-caption-mono-sm break-all text-mute">{shareUrl}</p>
+	{#if onRegenerate}
+		<button type="button" class="pill-outline" onclick={onRegenerate} disabled={regenerating}>
+			{regenerating ? 'Working...' : 'Try again'}
+		</button>
 	{/if}
-</article>
+
+	{#if canShare}
+		<button type="button" class="pill-outline" onclick={nativeShare}>Share</button>
+	{/if}
+
+	<a class="pill-outline inline-block" href={imageUrl} target="_blank" rel="noopener">Image</a>
+{/snippet}
+
+{#snippet urlLine()}
+	<p class="mt-3 font-mono text-caption-mono-sm break-all text-mute">{shareUrl}</p>
+{/snippet}
+
+<BhaiPost
+	text={result.text}
+	actions={showActions ? actions : undefined}
+	footer={showActions ? urlLine : undefined}
+/>

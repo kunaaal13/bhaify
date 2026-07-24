@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import BhaiPost from '$lib/components/BhaiPost.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -46,24 +47,25 @@
 	<meta name="twitter:image" content={ogUrl} />
 </svelte:head>
 
+{#snippet actions()}
+	<button type="button" class="pill-filled" onclick={copyLink}>
+		{copied ? 'Link copied' : 'Copy link'}
+	</button>
+	<a class="pill-outline inline-block" href={ogUrl} target="_blank" rel="noopener">Image</a>
+	<a class="pill-outline inline-block" href="/">Make your own</a>
+	<a class="pill-outline inline-block" href="/wall">Wall</a>
+{/snippet}
+
+{#snippet original()}
+	<p class="mt-3 font-mono text-caption-mono-sm text-mute">pehle : {r.inputText}</p>
+{/snippet}
+
 <div class="mx-auto max-w-3xl px-6 pt-12 pb-24">
-	<p class="text-body-sm text-body-mid">Bhai ne kaha</p>
+	<p class="mb-6 text-body-sm text-body-mid">Bhai ne kaha</p>
 
-	<article class="card mt-6 p-6 sm:p-8">
-		<p class="text-display-xs font-normal whitespace-pre-wrap text-ink sm:text-display-sm">
-			{r.text}
-		</p>
-	</article>
-
-	<p class="mt-4 font-mono text-caption-mono-sm text-mute">pehle : {r.inputText}</p>
-
-	<div class="mt-8 flex flex-wrap items-center gap-2">
-		<button type="button" class="pill-outline" onclick={copyLink}>
-			{copied ? 'Link copied' : 'Copy link'}
-		</button>
-		<a class="pill-outline inline-block" href="/">Make your own</a>
-		<a class="pill-outline inline-block" href="/wall">Wall</a>
-	</div>
+	<!-- Same component the result card uses, so the page matches the image that
+	     was shared to get here. -->
+	<BhaiPost text={r.text} size="large" {actions} footer={original} />
 
 	<div class="mt-16 border-t border-hairline pt-6">
 		<button

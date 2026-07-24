@@ -17,12 +17,12 @@ const HEIGHT = 630;
 /**
  * Share card, styled as a post.
  *
- * It reads as a nice tweet-shaped card — avatar, name, handle — but is
- * deliberately NOT a pixel replica of X's chrome, and carries a visible
- * "bhaify — parody" mark (PLAN.md §3.6). An image indistinguishable from a real
- * screenshot turns parody into a fabricated quote, which is both a
- * misinformation vector and the likeliest thing to draw a complaint. The label
- * costs one line and keeps the whole thing defensible.
+ * The explicit "PARODY . NOT A REAL POST ." line was removed at the owner's
+ * request. The `bhaify` wordmark stays and is now the only thing marking the
+ * card's origin — it is what keeps the image attributed rather than passing as
+ * an X screenshot, so do not remove it too. The card is also deliberately not a
+ * pixel replica of X's chrome, and the page it links to carries the full
+ * disclaimer (PLAN.md §3.6).
  *
  * Layout notes: the renderer supports flexbox only — no grid, no float — and
  * every node needs an explicit `display`, since there are no CSS defaults to
@@ -48,12 +48,11 @@ function template(text: string): string {
 			<div style="display:flex;color:#ffffff;font-size:${size}px;line-height:1.32;letter-spacing:-0.5px;">${escaped}</div>
 		</div>
 
-		<div style="display:flex;width:100%;align-items:center;justify-content:space-between;border-top:1px solid #212327;padding-top:28px;">
+		<div style="display:flex;width:100%;align-items:center;border-top:1px solid #212327;padding-top:28px;">
 			<div style="display:flex;align-items:center;">
 				<div style="display:flex;width:10px;height:10px;border-radius:10px;background-color:#ff7a17;"></div>
 				<div style="display:flex;color:#ffffff;font-size:24px;margin-left:12px;">bhaify</div>
 			</div>
-			<div style="display:flex;color:#7d8187;font-size:20px;letter-spacing:1px;">PARODY . NOT A REAL POST .</div>
 		</div>
 
 	</div>
