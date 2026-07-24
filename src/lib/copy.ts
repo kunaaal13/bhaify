@@ -12,7 +12,9 @@
 
 export const COPY = {
 	home: {
-		tagline: 'Kuch bhi likho . Bhai bana denge .',
+		// Parallel construction, four words, his punctuation. Says exactly what the
+		// product does without describing it — "yours in, his out".
+		tagline: 'Tumhari baat . Bhai ki zubaan .',
 		intro:
 			'Write one line. Get back what he would have sent at 2am — unspellchecked, unexplained, unbothered.'
 	},
