@@ -8,7 +8,7 @@ import { db } from '$lib/server/db';
 import { bhaifications } from '$lib/server/db/schema';
 // ?inline gives a base64 data URI. The renderer has no network access and
 // static/ is not processed by Vite, so the avatar has to be inlined.
-import avatar from '$lib/assets/salman-avatar.png?inline';
+import avatar from '$lib/assets/salman-avatar.jpg?inline';
 import type { RequestHandler } from './$types';
 
 const WIDTH = 1200;

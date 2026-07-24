@@ -26,10 +26,10 @@
 		<!-- One consistent avatar across every card: these are all posts by the same
 		     account, so rotating portraits read as different people. -->
 		<img
-			src="/images/salman-avatar.png"
+			src="/images/salman-avatar.jpg"
 			alt=""
-			width="36"
-			height="36"
+			width="72"
+			height="72"
 			loading="lazy"
 			class="h-9 w-9 shrink-0 rounded-full object-cover"
 		/>

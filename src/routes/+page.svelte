@@ -38,10 +38,10 @@
 		</div>
 
 		<img
-			src="/images/salman-avatar.png"
+			src="/images/salman-avatar.jpg"
 			alt="Bhai"
-			width="112"
-			height="112"
+			width="224"
+			height="224"
 			class="hidden h-28 w-28 shrink-0 rounded-full border border-hairline object-cover sm:block"
 		/>
 	</div>

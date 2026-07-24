@@ -1,10 +1,25 @@
 # Image provenance
 
-| File                              | Source                        | Notes                                                                |
-| --------------------------------- | ----------------------------- | -------------------------------------------------------------------- |
-| `static/images/salman-avatar.png` | Supplied by the project owner | 48×48. The single avatar on every tweet card, and the hero portrait. |
+| File                               | Source                                                                     | Notes                                                                                                                                  |
+| ---------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `static/images/salman-avatar.jpg`  | `pbs.twimg.com` — the @BeingSalmanKhan profile picture, full-size original | 400×400. The single avatar everywhere: tweet cards, header, hero, and the OG share card.                                               |
+| `src/lib/assets/salman-avatar.jpg` | Same file                                                                  | Duplicated into `src/` so Vite can inline it as a data URI for the OG renderer, which has no network access and cannot read `static/`. |
 
 That is the only image in the project.
+
+## Resolution
+
+The project owner originally supplied this image at 48×48 — the `_normal`
+variant X serves for inline avatars. At 48px it was visibly soft anywhere
+larger than a list avatar, and badly so at the 112px hero and 76px OG sizes.
+
+X stores the same upload at several sizes; stripping the `_normal` suffix from
+the URL returns the original, which is 400×400 — about 8× the pixel data, and
+enough for the 112px hero even on a 2× display. Same photograph, just not
+upscaled.
+
+Intrinsic `width`/`height` attributes are set to 2× the CSS display size so
+high-density screens receive real pixels rather than interpolation.
 
 ## Why only one
 

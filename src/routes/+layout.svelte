@@ -26,10 +26,10 @@
 		<nav class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
 			<a href="/" class="group flex shrink-0 items-center gap-2.5">
 				<img
-					src="/images/salman-avatar.png"
+					src="/images/salman-avatar.jpg"
 					alt=""
-					width="28"
-					height="28"
+					width="56"
+					height="56"
 					class="h-7 w-7 rounded-full border border-hairline object-cover"
 				/>
 				<span class="text-display-xs leading-none font-normal tracking-tight text-ink">Bhaify</span>
