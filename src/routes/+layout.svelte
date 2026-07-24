@@ -13,9 +13,12 @@
 	<header class="border-b border-hairline">
 		<nav class="mx-auto flex max-w-3xl items-center justify-between px-6 py-3">
 			<a href="/" class="text-body-sm text-ink">Bhaify</a>
-			<div class="flex items-center gap-6">
-				<a href="/gallery" class="text-body-sm text-body-mid transition-colors hover:text-ink">
-					Darbar
+			<div class="flex items-center gap-4 sm:gap-6">
+				<a href="/dohe" class="text-body-sm text-body-mid transition-colors hover:text-ink">
+					Dohe
+				</a>
+				<a href="/likhwaya" class="text-body-sm text-body-mid transition-colors hover:text-ink">
+					Likhwaya
 				</a>
 				<a href="/about" class="text-body-sm text-body-mid transition-colors hover:text-ink">
 					Baat cheet

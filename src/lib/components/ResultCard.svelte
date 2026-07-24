@@ -1,5 +1,4 @@
 <script lang="ts">
-	import MetaRow from './MetaRow.svelte';
 	import type { BhaifyResult } from '$lib/types';
 
 	interface Props {
@@ -32,18 +31,8 @@
 <article class="card p-6">
 	<p class="text-body-lg whitespace-pre-wrap text-ink">{result.text}</p>
 
-	<div class="mt-5 border-t border-hairline pt-4">
-		<MetaRow
-			register={result.register}
-			markers={result.markers}
-			model={result.model}
-			latencyMs={result.latencyMs}
-			cached={result.cached}
-		/>
-	</div>
-
 	{#if showActions}
-		<div class="mt-5 flex flex-wrap items-center gap-2">
+		<div class="mt-6 flex flex-wrap items-center gap-2">
 			<button type="button" class="pill-outline" onclick={copy}>
 				{copied ? 'Copy ho gaya' : 'Copy karo'}
 			</button>

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import MetaRow from '$lib/components/MetaRow.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -54,16 +53,6 @@
 		<p class="text-display-xs font-normal whitespace-pre-wrap text-ink sm:text-display-sm">
 			{r.text}
 		</p>
-
-		<div class="mt-6 border-t border-hairline pt-4">
-			<MetaRow
-				register={r.register}
-				markers={r.markers}
-				model={r.model}
-				latencyMs={r.latencyMs}
-				cached={false}
-			/>
-		</div>
 	</article>
 
 	<p class="mt-4 font-mono text-caption-mono-sm text-mute">pehle : {r.inputText}</p>

@@ -3,9 +3,15 @@
 
 	interface Props {
 		tweet: CorpusTweet;
+		/**
+		 * Fill the container instead of a fixed card width. The marquee needs a
+		 * fixed width so the scroll distance is predictable; masonry needs the
+		 * card to fill its column.
+		 */
+		fluid?: boolean;
 	}
 
-	let { tweet }: Props = $props();
+	let { tweet, fluid = false }: Props = $props();
 
 	const year = $derived(tweet.date.slice(0, 4));
 	const likes = $derived(
@@ -13,7 +19,9 @@
 	);
 </script>
 
-<article class="card flex w-[300px] shrink-0 snap-start flex-col p-5 sm:w-[340px]">
+<article
+	class="card flex flex-col p-5 {fluid ? 'w-full' : 'w-[300px] shrink-0 snap-start sm:w-[340px]'}"
+>
 	<header class="flex items-center gap-3">
 		<!-- One consistent avatar across every card: these are all posts by the same
 		     account, so rotating portraits read as different people. -->
