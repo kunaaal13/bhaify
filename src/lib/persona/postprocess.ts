@@ -4,6 +4,10 @@
  * Kept out of server/bhaify.ts so they can be tested without a DB connection —
  * that module instantiates the Neon client at import time.
  */
+import { COMPRESSED_FORMS } from './metrics';
+
+/** Built from metrics.ts so the display count and the eval score never diverge. */
+const COMPRESSED_MARKER_RE = new RegExp(`\\b(${COMPRESSED_FORMS.join('|')})\\b`, 'gi');
 
 /**
  * Strips the wrapper text models add despite being told not to: surrounding
@@ -41,16 +45,30 @@ export function cleanModelOutput(raw: string): string {
  * and density is 0 — which reads as "broken" if shown to a user looking at
  * obviously-styled output. This scores the artefact rather than our activity,
  * so it stays meaningful either way.
+ *
+ * TWO FREEBIES REMOVED (see metrics.ts for the measurements):
+ *
+ * 1. `/aa|oo|uu/` used to be counted. Pure Hindi transliteration is full of
+ *    doubled vowels — "khaana", "poori", "aachi" — so translating to clean Hindi
+ *    scored high here while containing none of the SMS orthography that actually
+ *    makes the voice. It rewarded the dominant failure mode.
+ *
+ * 2. Space-before-terminal is capped at 2. It is a real marker, but uncapped it
+ *    paid out once per beat, so the three-beat template banked three markers for
+ *    free before writing a single word in voice.
+ *
+ * Compression is the load-bearing marker, so it is counted from the same table
+ * metrics.ts scores against rather than a second hand-maintained list.
  */
 export function countStyleMarkers(text: string): number {
 	let n = 0;
-	n += (text.match(/\s[.?!]/g) ?? []).length; // space before terminal punctuation
+	n += Math.min(2, (text.match(/\s[.?!]/g) ?? []).length); // space before terminal punctuation
 	n += (text.match(/,\S/g) ?? []).length; // missing space after comma
 	n += (text.match(/\?\?|!!|\?!/g) ?? []).length; // stacked marks
 	n += (text.match(/\.{3,}|…/g) ?? []).length; // trailing shrug
 	n += (text.match(/(.)\1{2,}/g) ?? []).length; // elongation
-	n += (text.match(/\b(u|ur|n|nt|b|k|hv|bt|jst|coz|plz|wld|vil|kno|thr|abt)\b/gi) ?? []).length;
-	n += (text.match(/aa|oo|uu/g) ?? []).length; // doubled vowels
+	n += (text.match(COMPRESSED_MARKER_RE) ?? []).length; // SMS compression
+	n += (text.match(/\b\d\b/g) ?? []).length; // numeral standing in for a word
 	n += (text.match(/\b(he|ha)(he|ha)+\b/gi) ?? []).length; // laughter
 	return n;
 }
