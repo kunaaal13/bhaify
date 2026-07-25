@@ -15,6 +15,34 @@ const WIDTH = 1200;
 const HEIGHT = 630;
 
 /**
+ * Two palettes, picked with ?theme=. Dark is the site's own tokens; light is
+ * for anywhere the card lands on a white background — a deck, a doc, a light
+ * timeline — where the dark card reads as a hole in the page.
+ *
+ * Nothing in the UI selects light: the toggle that did was removed as clutter,
+ * so this is reachable by hand-editing the image URL only. Kept because it is
+ * the whole cost of offering a light download again later.
+ *
+ * The light values are chosen here rather than read from layout.css because the
+ * site has no light theme to borrow from. They stay warm-neutral to match the
+ * off-white the dark theme already uses for hover ink.
+ */
+const THEMES = {
+	dark: {
+		card: '#191919',
+		ink: '#ffffff',
+		mute: '#7d8187'
+	},
+	light: {
+		card: '#fdfdfb',
+		ink: '#14161a',
+		mute: '#6b6f76'
+	}
+} as const;
+
+export type CardTheme = keyof typeof THEMES;
+
+/**
  * Share card, styled as a post.
  *
  * The explicit "PARODY . NOT A REAL POST ." line and the `bhaify` wordmark were
@@ -27,31 +55,30 @@ const HEIGHT = 630;
  * every node needs an explicit `display`, since there are no CSS defaults to
  * fall back on.
  */
-function template(text: string): string {
+function template(text: string, theme: CardTheme): string {
 	const len = text.length;
 	const size = len > 220 ? 34 : len > 140 ? 42 : len > 70 ? 52 : 62;
 	const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	const c = THEMES[theme];
 
-	return `<div style="display:flex;width:100%;height:100%;background-color:#0a0a0a;padding:56px;">
-	<div style="display:flex;flex-direction:column;width:100%;height:100%;background-color:#191919;border:1px solid #212327;border-radius:24px;padding:48px;">
+	return `<div style="display:flex;flex-direction:column;width:100%;height:100%;background-color:${c.card};padding:72px;">
 
-		<div style="display:flex;align-items:center;width:100%;">
-			<img src="${avatar}" width="76" height="76" style="border-radius:76px;" />
-			<div style="display:flex;flex-direction:column;margin-left:20px;">
-				<div style="display:flex;color:#ffffff;font-size:30px;">Salman Khan</div>
-				<div style="display:flex;color:#7d8187;font-size:24px;margin-top:4px;">@BeingSalmanKhan</div>
-			</div>
+	<div style="display:flex;align-items:center;width:100%;">
+		<img src="${avatar}" width="76" height="76" style="border-radius:76px;" />
+		<div style="display:flex;flex-direction:column;margin-left:20px;">
+			<div style="display:flex;color:${c.ink};font-size:30px;">Salman Khan</div>
+			<div style="display:flex;color:${c.mute};font-size:24px;margin-top:4px;">@BeingSalmanKhan</div>
 		</div>
-
-		<div style="display:flex;flex-grow:1;align-items:center;width:100%;padding-top:36px;">
-			<div style="display:flex;color:#ffffff;font-size:${size}px;line-height:1.32;letter-spacing:-0.5px;">${escaped}</div>
-		</div>
-
 	</div>
+
+	<div style="display:flex;flex-grow:1;align-items:center;width:100%;padding-top:36px;">
+		<div style="display:flex;color:${c.ink};font-size:${size}px;line-height:1.32;letter-spacing:-0.5px;">${escaped}</div>
+	</div>
+
 </div>`;
 }
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, url }) => {
 	const [row] = await db
 		.select({ text: bhaifications.outputText, isFlagged: bhaifications.isFlagged })
 		.from(bhaifications)
@@ -60,12 +87,17 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	if (!row || row.isFlagged) error(404, 'Not found');
 
-	return new ImageResponse(template(row.text), {
+	// Anything but an exact ?theme=light is dark, so a mangled param degrades to
+	// the theme every existing share link already points at.
+	const theme: CardTheme = url.searchParams.get('theme') === 'light' ? 'light' : 'dark';
+
+	return new ImageResponse(template(row.text, theme), {
 		width: WIDTH,
 		height: HEIGHT,
 		format: 'png',
 		headers: {
-			// Content at a given id never changes.
+			// Content at a given id and theme never changes, and the theme is part
+			// of the URL, so the two variants cache separately.
 			'Cache-Control': 'public, immutable, no-transform, max-age=31536000'
 		}
 	});

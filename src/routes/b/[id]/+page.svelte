@@ -1,81 +1,16 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import BhaiPost from '$lib/components/BhaiPost.svelte';
+	import CardActions from '$lib/components/CardActions.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const r = $derived(data.result);
 
-	const shareUrl = $derived(page.url.href);
+	/** The dark card is what unfurls in a timeline; light is a download choice. */
 	const ogUrl = $derived(new URL(`/b/${r.id}/og.png`, page.url.origin).href);
 
-	let copied = $state(false);
 	let reported = $state(false);
-
-	// Resolved after mount, not during render: the server has no navigator, and
-	// guessing would mismatch on hydration.
-	let canShare = $state(false);
-	$effect(() => {
-		canShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
-	});
-
-	let sharing = $state(false);
-
-	/**
-	 * Puts the card image in the tray, so it lands in WhatsApp or Instagram as a
-	 * picture rather than a link nobody taps.
-	 *
-	 * Which payloads a browser accepts varies, so each shape is offered to
-	 * canShare() before it is used: image plus link, then image alone (iOS drops
-	 * some combinations), then the link on its own if files are unsupported
-	 * entirely — desktop Safari and Firefox.
-	 */
-	async function share() {
-		if (sharing) return;
-		sharing = true;
-
-		try {
-			const file = await cardImage();
-			const payloads: ShareData[] = file
-				? [
-						{ files: [file], text: r.text, url: shareUrl },
-						{ files: [file], text: r.text },
-						{ files: [file] }
-					]
-				: [];
-			payloads.push({ title: 'Bhaify', text: r.text, url: shareUrl });
-
-			const payload = payloads.find((p) => (p.files ? navigator.canShare?.(p) : true));
-			if (payload) await navigator.share(payload);
-		} catch {
-			// Dismissing the tray rejects with AbortError. Nothing went wrong.
-		} finally {
-			sharing = false;
-		}
-	}
-
-	/** null if the image can't be fetched or the browser has no File support. */
-	async function cardImage(): Promise<File | null> {
-		if (typeof File !== 'function' || typeof navigator.canShare !== 'function') return null;
-		try {
-			const res = await fetch(ogUrl);
-			if (!res.ok) return null;
-			const blob = await res.blob();
-			return new File([blob], `bhai-${r.id}.png`, { type: 'image/png' });
-		} catch {
-			return null;
-		}
-	}
-
-	async function copyLink() {
-		try {
-			await navigator.clipboard.writeText(shareUrl);
-			copied = true;
-			setTimeout(() => (copied = false), 1600);
-		} catch {
-			// Clipboard is permission-gated; silence is better than an error toast.
-		}
-	}
 
 	async function report() {
 		if (reported) return;
@@ -103,16 +38,10 @@
 </svelte:head>
 
 {#snippet actions()}
-	{#if canShare}
-		<button type="button" class="pill-filled" onclick={share} disabled={sharing}>
-			{sharing ? 'Opening…' : 'Share'}
-		</button>
-	{/if}
-	<button type="button" class={canShare ? 'pill-outline' : 'pill-filled'} onclick={copyLink}>
-		{copied ? 'Link copied' : 'Copy link'}
-	</button>
-	<!-- Same-origin, so the browser honours `download` instead of navigating. -->
-	<a class="pill-outline inline-block" href={ogUrl} download="bhai-{r.id}.png">Download</a>
+	<CardActions id={r.id} text={r.text} {extra} />
+{/snippet}
+
+{#snippet extra()}
 	<a class="pill-outline inline-block" href="/">Make your own</a>
 	<a class="pill-outline inline-block" href="/wall">Wall</a>
 {/snippet}
