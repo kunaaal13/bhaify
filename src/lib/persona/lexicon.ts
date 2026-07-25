@@ -60,6 +60,25 @@ export const SMS_LEXICON: Substitution[] = [
 	{ from: 'tomorrow', to: 'tom', tier: 'medium' },
 	{ from: 'will', to: 'vil', tier: 'medium' },
 
+	// Added 2026-07. Every one is attested in the corpus — the table was thin
+	// enough that once output became English-based (the Phase 1 few-shot rewrite),
+	// there were still common function words with no rule to catch them.
+	//   "u r so busy that u don't have any time"     -> are  -> r
+	//   "Soch raha hoon wat to tweet"                -> what -> wat
+	//   "Gd nite"                                    -> good -> gd
+	//   "global warmin u wnt undrstnd"               -> want -> wnt
+	{ from: 'are', to: 'r', tier: 'medium' },
+	{ from: 'what', to: 'wat', tier: 'medium' },
+	{ from: 'good', to: 'gd', tier: 'low' },
+	{ from: 'want', to: 'wnt', tier: 'low' },
+
+	// Numerals standing in for words: "2 ways to be by yr self", "b offered 1",
+	// "jst do nt want 2 c u waist your life". Kept low — these are the loudest
+	// possible tell, and at any real frequency the line stops being readable.
+	{ from: 'one', to: '1', tier: 'low' },
+	{ from: 'two', to: '2', tier: 'low' },
+	{ from: 'see', to: 'c', tier: 'low' },
+
 	// ── Tier: low. Distinctive but sparse — overuse makes it a parody of itself. ──
 	{ from: 'come', to: 'cm', tier: 'low' },
 	{ from: 'for', to: 'fr', tier: 'low' },
@@ -88,7 +107,11 @@ export const HINDI_DOUBLING: Substitution[] = [
 	{ from: 'hisab', to: 'hisaab', tier: 'medium' },
 	{ from: 'zuban', to: 'zubaan', tier: 'medium' },
 	{ from: 'mehfuz', to: 'mehfooz', tier: 'medium' },
-	{ from: 'raat', to: 'rath', tier: 'low' },
+	// REMOVED: raat -> rath. It appears exactly once in the corpus ("Kal rath ko
+	// badaam khaya") and is a one-off typo, not a pattern. As a rule it fired on
+	// every "raat" and produced "Roz rath ko loud music", which reads as
+	// misspelling rather than style — the corpus itself writes "raat" elsewhere
+	// ("Late fr shoot", "gnit" tweets). One instance is not a tier.
 	{ from: 'chalo', to: 'challo', tier: 'medium' },
 	{ from: 'bakwas', to: 'bakwass', tier: 'medium' }
 ];

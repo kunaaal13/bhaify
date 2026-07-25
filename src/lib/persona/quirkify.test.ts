@@ -233,17 +233,12 @@ describe('quirkify — density telemetry', () => {
 });
 
 describe('QUIRK_RATES', () => {
+	// Enumerated from the object rather than listed by hand, so removing a
+	// transform cannot leave a stale name here asserting on `undefined`.
 	it('keeps every rate below 1 — total consistency reads like a cipher', () => {
-		const rates = [
-			...Object.values(QUIRK_RATES.lexicon),
-			QUIRK_RATES.hindiDoubling,
-			QUIRK_RATES.gerundClipping,
-			QUIRK_RATES.spaceBeforeTerminal,
-			QUIRK_RATES.commaSpaceDeletion,
-			QUIRK_RATES.ellipsisVariation,
-			QUIRK_RATES.midSentenceCaps,
-			QUIRK_RATES.elongation
-		];
+		const { lexicon, ...scalars } = QUIRK_RATES;
+		const rates = [...Object.values(lexicon), ...Object.values(scalars)];
+		expect(rates.length).toBeGreaterThan(4);
 		for (const r of rates) {
 			expect(r).toBeGreaterThan(0);
 			expect(r).toBeLessThan(1);
