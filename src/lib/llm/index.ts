@@ -14,6 +14,12 @@ export interface Provider {
 	baseURL: string;
 	model: string;
 	apiKey: string | undefined;
+	/**
+	 * Extra top-level body fields merged into the request. Provider-specific knobs
+	 * that don't exist in the OpenAI shape live here (currently: capping Gemini's
+	 * thinking budget).
+	 */
+	extra?: Record<string, unknown>;
 }
 
 /**
@@ -23,25 +29,59 @@ export interface Provider {
  * Gemini's `/v1beta/openai/` compatibility layer is labelled beta by Google, but
  * verified working — both providers take an identical OpenAI-shaped payload.
  *
- * MODEL CHOICES (verified live 2026-07-24, both differ from the original plan):
+ * MODEL CHOICES — reordered 2026-07 after `scripts/bakeoff.ts`.
  *
- * - `gemini-flash-lite-latest`, not `gemini-2.5-flash`. 2.5-flash now 404s with
- *   "no longer available to new users". The obvious replacement,
- *   `gemini-flash-latest`, is a *thinking* model: it burned 301 hidden reasoning
- *   tokens to produce a 16-token line (344 total). For a one-line rewrite that's
- *   ~5x cost and latency for no gain — and it would silently truncate against
- *   our max_tokens. Lite spends 64 total and its output is, if anything, better.
+ * `gemini-flash-latest` is now PRIMARY, reversing the earlier decision. That
+ * decision was correct on its own evidence and wrong on one detail: it measured
+ * the model with reasoning ON (301 hidden tokens for a 16-token line) and
+ * concluded it was 5x cost for no gain. Reasoning can be capped, and once it is,
+ * the model is in a different class for this task. Measured over 12 cases with
+ * slots rotated:
  *
- * - `google/gemma-4-31b-it:free`, not `llama-3.3-70b-instruct:free`, which is no
- *   longer free ("use the paid slug instead"). Gemma shares Gemini's lineage and
- *   handles Hinglish well. The Nemotron free models were skipped deliberately —
- *   they're tuned for reasoning and tool-use, not character voice.
+ *                        compression   english   pure-Hindi   gate    latency
+ *   gemini-flash-lite         3.4/100w       5%         50%   FAIL      1.1s
+ *   gemini-flash (minimal)   13.0/100w      19%          0%   pass      9.3s
+ *   (corpus reference)        8.5/100w      19%           —      —         —
  *
- * Both are worth re-checking if output quality drifts; free-tier model slugs
- * change without notice.
+ * flash-lite does not merely score lower — half its output is pure Hindi
+ * translation, which is the specific failure that made the product feel wrong.
+ * flash-latest matches the corpus's English-base share exactly.
+ *
+ * The cost is real and accepted: ~8x slower, and 5 of 12 calls returned HTTP 503
+ * "high demand". 503 is already retryable, so the chain falls through to flash-lite
+ * automatically — a slower good answer when capacity exists, a fast mediocre one
+ * when it doesn't. Quality is the thing being fixed, so it leads.
+ *
+ * `reasoning_effort` is fiddly on the compat layer and the working value is not
+ * the obvious one — measured:
+ *   'none'    -> HTTP 400 INVALID_ARGUMENT
+ *   'low'     -> 200, but 98 total tokens to emit "ok"
+ *   'minimal' -> 200, 8 total tokens          <- what we use
+ *   omitted   -> 200, 117 total tokens
+ * `extra_body` / `google.thinking_config` are Python-SDK shapes and 400 over REST.
+ *
+ * OpenRouter free tier is kept as the last resort but is unreliable in practice —
+ * `gemma-4-31b`, `gpt-oss-20b` and `ling-3.0-flash` all returned 429 during the
+ * bake-off. The Nemotron free models (including the 550B) were re-tested and are
+ * unusable here for a concrete reason, not a hunch: they emit their entire
+ * chain-of-thought as message content ("The user wants me to rewrite..."), so
+ * there is no clean answer to extract.
+ *
+ * Re-run `npx tsx --env-file=.env scripts/bakeoff.ts` if quality drifts; free-tier
+ * slugs change without notice.
  */
 export function getProviders(): Provider[] {
 	return [
+		{
+			name: 'gemini-flash',
+			baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+			model: 'gemini-flash-latest',
+			apiKey: env.GEMINI_API_KEY,
+			// Without this the model burns ~300 hidden reasoning tokens per line and
+			// risks truncating against max_tokens. See the note above for why
+			// 'minimal' and not 'none'.
+			extra: { reasoning_effort: 'minimal' }
+		},
 		{
 			name: 'gemini-flash-lite',
 			baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
@@ -126,7 +166,8 @@ async function callProvider(
 				// High-ish: the voice depends on unpredictable swerves. Too low and
 				// every output converges on the same safe phrasing.
 				temperature: opts.temperature ?? 1.0,
-				max_tokens: opts.maxTokens ?? 300
+				max_tokens: opts.maxTokens ?? 300,
+				...provider.extra
 			}),
 			signal: controller.signal
 		});
