@@ -45,8 +45,8 @@ export const COPY = {
 	},
 
 	about: {
-		title: 'Baat cheet',
+		title: 'A love letter, badly translated.',
 		intro:
-			'A machine that types like bhai. Not a chatbot — it will not answer you, argue with you, or help you with anything. It takes what you wrote and sends it back in his voice.'
+			'Bhaify takes anything you write and hands it back the way Bhai would have said it — same meaning, entirely different swagger.'
 	}
 } as const;

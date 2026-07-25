@@ -80,12 +80,26 @@
 			<p class="font-mono text-caption-mono-sm leading-relaxed text-mute">
 				Fan parody project. Not affiliated with, endorsed by, or associated with Salman Khan.
 			</p>
-			<a
-				href="/about"
-				class="shrink-0 font-mono text-caption-mono-sm text-mute transition-colors hover:text-body"
-			>
-				About &rarr;
-			</a>
+			<div class="flex shrink-0 items-center gap-4 font-mono text-caption-mono-sm text-mute">
+				<span>
+					Built by
+					<a
+						href="https://x.com/kunaaal13"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="footer-link">@kunaaal13</a
+					>
+				</span>
+				<span aria-hidden="true" class="opacity-40">/</span>
+				<a
+					href="https://github.com/kunaaal13"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="footer-link">GitHub</a
+				>
+				<span aria-hidden="true" class="opacity-40">/</span>
+				<a href="/about" class="footer-link">About &rarr;</a>
+			</div>
 		</div>
 	</footer>
 </div>
@@ -107,5 +121,12 @@
 	.nav-link.is-active {
 		color: var(--color-ink);
 		background-color: var(--color-canvas-soft);
+	}
+	.footer-link {
+		color: var(--color-body);
+		transition: color 150ms ease;
+	}
+	.footer-link:hover {
+		color: var(--color-ink);
 	}
 </style>

@@ -1,39 +1,54 @@
 <svelte:head>
-	<title>Baat cheet — Bhaify</title>
-	<meta name="description" content="Yeh kya hai , kaise chalta hai , aur zaroori baat ." />
+	<title>About — Bhaify</title>
+	<meta
+		name="description"
+		content="What Bhaify is, what it isn't, and the disclaimer that matters."
+	/>
 </svelte:head>
 
-<div class="mx-auto max-w-3xl px-6 pt-12 pb-24">
-	<h1 class="text-display-sm font-normal text-ink sm:text-display-md">Baat cheet</h1>
+<div class="mx-auto max-w-2xl px-6 pt-16 pb-24">
+	<p class="eyebrow">About</p>
+	<h1 class="mt-4 text-display-sm font-normal text-ink sm:text-display-md">
+		A love letter, badly translated.
+	</h1>
+	<p class="mt-5 text-body-lg text-body">
+		Bhaify takes anything you write and hands it back the way Bhai would have said it — same
+		meaning, entirely different swagger.
+	</p>
 
-	<div class="mt-10 space-y-10">
+	<div class="mt-14 space-y-12">
 		<section>
-			<p class="text-body-sm text-body-mid">Yeh hai kya</p>
-			<p class="mt-3 text-body-lg text-body">
-				Kuch bhi likho . Wahi baat bhai ki zubaan mein wapas milegi . Yeh chat nahi hai — tumhare
-				message ka jawaab nahi deta , sirf usko dobara bolta hai .
+			<p class="eyebrow">The idea</p>
+			<p class="mt-4 text-body-md text-body">
+				Some people don't talk like everyone else. They talk in short lines that land like a
+				dialogue, and half the fun is the delivery, not the point. This site is a small tribute to
+				that — a machine that only knows one way to say things, and says everything that way.
+			</p>
+			<p class="mt-4 text-body-md text-body">
+				It isn't a chatbot. It won't answer you, argue with you, or help you with anything. Give it
+				a sentence and it gives that same sentence back, dressed differently. That's the whole
+				trick.
 			</p>
 		</section>
 
 		<section>
-			<p class="text-body-sm text-body-mid">Kaise chalta hai</p>
-			<p class="mt-3 text-body-md text-body">
-				Ek language model likhta hai , 52 purane posts se seekhe hue andaaz mein . Uske baad code ka
-				ek aur round chalta hai jo spelling theek karta hai — u , n , nt , aur Hindi ke doubled
-				vowels . Model yeh cheezein kam laga deta hai aur dheere dheere saaf angrezi pe wapas chala
-				jaata hai , isliye woh kaam code se karwaya jaata hai .
+			<p class="eyebrow">Using it</p>
+			<p class="mt-4 text-body-md text-body">
+				Type something ordinary — a status update, an excuse, a bad opinion. Ordinary lines work
+				best, because the gap between what you wrote and what comes back is where the joke lives.
 			</p>
-			<p class="mt-3 text-body-md text-body">
-				Ek hi input se hamesha wahi teen jawaab aate hain . Isiliye share link kabhi badalta nahi .
+			<p class="mt-4 text-body-md text-body">
+				The same words always come back the same way, so a link you share today will still read the
+				same tomorrow. If you like one, put it on the Wall. If something on the Wall shouldn't be
+				there, report it and it goes.
 			</p>
 		</section>
 
 		<section>
-			<p class="text-body-sm text-body-mid">Zaroori baat</p>
-			<div class="card mt-3 p-6">
-				<!-- Deliberately plain English. This paragraph is the thing that
-				     separates parody from passing-off, and it only works if it is
-				     unambiguous to a reader who does not speak Hinglish. -->
+			<p class="eyebrow">The serious bit</p>
+			<div class="card mt-4 p-6">
+				<!-- Deliberately plain. This paragraph is the thing that separates
+				     parody from passing-off, so it stays blunt and unambiguous. -->
 				<p class="text-body-md text-ink">
 					Bhaify is a fan parody project. It is
 					<strong class="font-normal"
@@ -41,15 +56,55 @@
 					>, or with any studio, production house, or platform.
 				</p>
 				<p class="mt-3 text-body-md text-body">
-					Nothing this site generates was written or said by him. Every output is machine-generated
-					parody in an imitated style, and is labelled as such wherever it can be shared.
+					Nothing here was written or said by him. Every line this site produces is machine-made
+					parody in an imitated style, and is labelled that way wherever it can be shared.
 				</p>
 				<p class="mt-3 text-body-md text-body">
-					Submitted text is stored so share links keep working, along with a hashed IP address for
-					rate limiting. Raw IP addresses are never stored. Anything shown publicly can be reported
-					and removed.
+					Made with affection, not impersonation. If it ever reads like the real thing rather than
+					an obvious joke about it, that's a bug.
 				</p>
 			</div>
 		</section>
+
+		<section>
+			<p class="eyebrow">Your text</p>
+			<p class="mt-4 text-body-md text-body">
+				What you submit is saved so share links keep working. Rate limiting uses a one-way hash of
+				your IP address — the address itself is never stored. Anything public can be reported and
+				removed.
+			</p>
+		</section>
+
+		<section class="border-t border-hairline pt-8">
+			<p class="text-body-md text-body-mid">
+				Built by
+				<a
+					href="https://x.com/kunaaal13"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="about-link">@kunaaal13</a
+				>
+				&middot;
+				<a
+					href="https://github.com/kunaaal13"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="about-link">GitHub</a
+				>
+			</p>
+		</section>
 	</div>
 </div>
+
+<style>
+	.about-link {
+		color: var(--color-ink);
+		text-decoration: underline;
+		text-decoration-color: var(--color-hairline);
+		text-underline-offset: 4px;
+		transition: text-decoration-color 150ms ease;
+	}
+	.about-link:hover {
+		text-decoration-color: var(--color-ink);
+	}
+</style>
