@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { buildPrompt, selectExamples, normalizeInput, FEW_SHOT_COUNT } from './prompt';
+import { buildPrompt, selectExamples, normalizeInput, FEW_SHOT_COUNT, SLOT_SHAPES } from './prompt';
 import { EXAMPLES } from './examples';
 import { CORPUS, USABLE_CORPUS } from './corpus';
+import { batchMetrics, checkTargets } from './metrics';
 
 describe('normalizeInput', () => {
 	it('collapses horizontal whitespace but keeps newlines', () => {
@@ -96,6 +97,32 @@ describe('corpus integrity', () => {
 	});
 });
 
+describe('variant slot shapes', () => {
+	// Regression: all three slots used to share one prompt and differ only by seed,
+	// which produced three rewordings of the same sentence rather than three takes.
+	it('gives each slot a different shape directive', () => {
+		const prompts = SLOT_SHAPES.map((_, i) => buildPrompt('i am tired of my job', 7, i).user);
+		expect(new Set(prompts).size).toBe(SLOT_SHAPES.length);
+	});
+
+	it('wraps out-of-range slots instead of emitting undefined', () => {
+		const base = buildPrompt('hello', 7, 0).user;
+		expect(buildPrompt('hello', 7, SLOT_SHAPES.length).user).toBe(base);
+		expect(buildPrompt('hello', 7, -SLOT_SHAPES.length).user).toBe(base);
+		for (const slot of [-4, -1, 0, 1, 2, 5, 99]) {
+			expect(buildPrompt('hello', 7, slot).user).not.toMatch(/undefined/);
+		}
+	});
+
+	// The system prompt is the cacheable prefix — anything varying per request must
+	// live in the user turn, or every request is a cache miss.
+	it('keeps the system prompt identical across slots, seeds and inputs', () => {
+		const a = buildPrompt('one thing', 1, 0).system;
+		const b = buildPrompt('a totally different thing', 9999, 2).system;
+		expect(a).toBe(b);
+	});
+});
+
 describe('few-shot examples', () => {
 	it('never reuses a corpus line verbatim (that teaches retrieval, not transformation)', () => {
 		const corpusTexts = new Set(USABLE_CORPUS.map((t) => t.text.trim().toLowerCase()));
@@ -105,19 +132,61 @@ describe('few-shot examples', () => {
 	});
 
 	// Measured in words, not characters: the voice puts spaces before full stops
-	// (" .") which inflates character counts without adding content. Padding is
-	// the failure this guards against — a padded few-shot teaches the model to
-	// expand a six-word message into three sentences.
-	it('keeps outputs in a sane length band relative to input', () => {
+	// (" .") which inflates character counts without adding content.
+	//
+	// RECALIBRATED 2026-07. This used to cap output at max(9, in * 2.5) words, on
+	// the theory that expansion was the enemy. It isn't — the real corpus expands
+	// freely, median 18 words with a max of 39, often off a one-line thought. That
+	// cap was actively enforcing the clipped three-beat rhythm that made output
+	// feel like a template. What we actually guard against is RUNAWAY length, so
+	// the ceiling is now the corpus's own maximum with headroom.
+	it('keeps outputs under the corpus length ceiling', () => {
 		const words = (s: string) =>
 			s
 				.trim()
 				.split(/\s+/)
 				.filter((w) => /\w/.test(w)).length;
-		const offenders = EXAMPLES.filter((e) => words(e.out) > Math.max(9, words(e.in) * 2.5)).map(
+		const offenders = EXAMPLES.filter((e) => words(e.out) > Math.max(30, words(e.in) * 4)).map(
 			(e) => `${words(e.in)}w -> ${words(e.out)}w  ${JSON.stringify(e.in)}`
 		);
 		expect(offenders).toEqual([]);
+	});
+
+	// The regression that mattered. Prose rules in style-guide.ts lose to
+	// demonstrated examples every time, so these metrics ARE the persona spec —
+	// if the examples drift off corpus texture, production output follows within
+	// one deploy and no other test notices.
+	it('matches corpus texture on every gated axis', () => {
+		const m = batchMetrics(
+			EXAMPLES.map((e) => e.out),
+			EXAMPLES.map((e) => e.in)
+		);
+		const gate = checkTargets(m);
+		expect(gate.failures).toEqual([]);
+		expect(gate.pass).toBe(true);
+	});
+
+	// Guards the specific inversion that broke the voice: examples that were 98%
+	// Hindi taught "translate", not "re-voice", and left quirkify's English-keyed
+	// lexicon with nothing to match (quirk_density 0 on 18 of 29 live rows).
+	it('keeps an English skeleton rather than translating to Hindi', () => {
+		const m = batchMetrics(EXAMPLES.map((e) => e.out));
+		expect(m.englishShare).toBeGreaterThanOrEqual(0.12);
+		expect(m.compressionRate).toBeGreaterThanOrEqual(8);
+	});
+
+	// The corpus is run-on dominant; the old example set was clipped-beat dominant.
+	// That inversion is what made every output read as the same Mad Lib.
+	it('stays run-on dominant like the corpus', () => {
+		const m = batchMetrics(EXAMPLES.map((e) => e.out));
+		const corpus = batchMetrics(USABLE_CORPUS.map((t) => t.text));
+		expect(m.oneSegmentShare).toBeGreaterThanOrEqual(0.35);
+		// The template to kill, measured against the source material.
+		expect(m.threeBeatShare).toBeLessThanOrEqual(corpus.threeBeatShare + 0.15);
+	});
+
+	it('covers Hinglish input, which is what users actually type', () => {
+		expect(EXAMPLES.filter((e) => e.intent === 'hinglish').length).toBeGreaterThanOrEqual(4);
 	});
 
 	// Regression: few-shots used a tacked-on closer 30% of the time while the real

@@ -12,7 +12,7 @@ import { db } from './db';
 import { bhaifications, type Bhaification } from './db/schema';
 import { cacheKeyFor, seedKey } from './hash';
 import { screenInput, screenOutput, blockMessage, type BlockReason } from './safety';
-import { normalizeInput, buildPrompt } from '$lib/persona/prompt';
+import { normalizeInput, buildPrompt, SLOT_SHAPES } from '$lib/persona/prompt';
 import { quirkify } from '$lib/persona/quirkify';
 import { hashSeed } from '$lib/persona/rng';
 import { cleanModelOutput, inferRegister, countStyleMarkers } from '$lib/persona/postprocess';
@@ -20,8 +20,14 @@ import { generate, NoProviderAvailableError } from '$lib/llm';
 
 export { cleanModelOutput, inferRegister, countStyleMarkers };
 
-/** Three cached takes per input. "Phir se" advances the slot (PLAN.md §4.2). */
-export const VARIANT_SLOTS = 3;
+/**
+ * How many cached takes per input. "Phir se" advances the slot (PLAN.md §4.2).
+ *
+ * Derived from SLOT_SHAPES rather than hardcoded: each slot maps to a distinct
+ * structural shape, so the two counts must agree or a slot would either reuse
+ * another's shape or wrap silently. Deriving it makes drift impossible.
+ */
+export const VARIANT_SLOTS = SLOT_SHAPES.length;
 
 export interface BhaifyOutcome {
 	ok: boolean;
@@ -105,7 +111,9 @@ export async function bhaify({
 	if (cached) return toResult(cached, true);
 
 	const seed = hashSeed(seedKey(cacheKey, slot));
-	const { system, user } = buildPrompt(normalized, seed);
+	// The slot picks a structural shape as well as seeding the sampler — seed
+	// variation alone produced three near-identical takes (see SLOT_SHAPES).
+	const { system, user } = buildPrompt(normalized, seed, slot);
 
 	let raw: string;
 	let model: string;
