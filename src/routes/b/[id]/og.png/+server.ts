@@ -17,12 +17,11 @@ const HEIGHT = 630;
 /**
  * Share card, styled as a post.
  *
- * The explicit "PARODY . NOT A REAL POST ." line was removed at the owner's
- * request. The `bhaify` wordmark stays and is now the only thing marking the
- * card's origin — it is what keeps the image attributed rather than passing as
- * an X screenshot, so do not remove it too. The card is also deliberately not a
- * pixel replica of X's chrome, and the page it links to carries the full
- * disclaimer (PLAN.md §3.6).
+ * The explicit "PARODY . NOT A REAL POST ." line and the `bhaify` wordmark were
+ * both removed at the owner's request, so the image now carries no mark of its
+ * own origin. What keeps it from reading as an X screenshot is that the card is
+ * deliberately not a pixel replica of X's chrome, and that the page it links to
+ * carries the full disclaimer (PLAN.md §3.6).
  *
  * Layout notes: the renderer supports flexbox only — no grid, no float — and
  * every node needs an explicit `display`, since there are no CSS defaults to
@@ -44,15 +43,8 @@ function template(text: string): string {
 			</div>
 		</div>
 
-		<div style="display:flex;flex-grow:1;align-items:center;width:100%;padding-top:36px;padding-bottom:36px;">
+		<div style="display:flex;flex-grow:1;align-items:center;width:100%;padding-top:36px;">
 			<div style="display:flex;color:#ffffff;font-size:${size}px;line-height:1.32;letter-spacing:-0.5px;">${escaped}</div>
-		</div>
-
-		<div style="display:flex;width:100%;align-items:center;border-top:1px solid #212327;padding-top:28px;">
-			<div style="display:flex;align-items:center;">
-				<div style="display:flex;width:10px;height:10px;border-radius:10px;background-color:#ff7a17;"></div>
-				<div style="display:flex;color:#ffffff;font-size:24px;margin-left:12px;">bhaify</div>
-			</div>
 		</div>
 
 	</div>
